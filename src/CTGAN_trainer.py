@@ -9,20 +9,21 @@ import csv
 import warnings
 from sdv.tabular import CTGAN
 from sdv.evaluation import evaluate
-
+from timer import Timer
+from time import time, ctime
 
 # import own scripts
 import conf
 from check_existence_dir_csv import check_dir, check_csv_path
 
 class TrainModel():
-    def __init__(self, dn):
+    def __init__(self, dn, ctgan_dir):
         # Write training progress to csv file
         check_dir(f'{conf.OUTPUT_DIR}/training_logs/')
         self.out_file = f'{conf.OUTPUT_DIR}/training_logs/CTGAN_training_log.csv'
-        check_csv_path(self.out_file, ['dataset_name', 'batch_size', 'generator_lr', 'generator_decay', 'discriminator_lr', 'discriminator_decay', 'evaluation'])
+        check_csv_path(self.out_file, ['dataset_name', 'batch_size', 'generator_lr', 'generator_decay', 'discriminator_lr', 'discriminator_decay', 'evaluation', 'fitting time', 'epoch time', 'time'])
         
-        self.ctgan_dir = f"{conf.OUTPUT_DIR}CTGAN_models/"
+        self.ctgan_dir = ctgan_dir
         check_dir(self.ctgan_dir)
 
         self.ctgan_model_path = f'{self.ctgan_dir}test_model.pkl'
@@ -44,19 +45,17 @@ class TrainModel():
         #self.discriminator_steps = 1 # 1 to match CTGAN implementation (5 for matching WGAN)
         
         self.eval = 0
-    
+        self.build_timer = Timer()
+        self.building_time = None  
 
     def write_params_csv(self):
-        """
-        Old function -> reuse if possible to log the training 
-        """
-        # TODO: Add duration training process + timestamp
         conn = open(self.out_file, 'a')
         writer = csv.writer(conn)
-        writer.writerow([self.dataset_name, self.batch_size, self.generator_lr, self.generator_decay, self.discriminator_lr, self.discriminator_decay, self.eval])
+        writer.writerow([self.dataset_name, self.batch_size, self.generator_lr, self.generator_decay, self.discriminator_lr, self.discriminator_decay, self.eval, self.building_time, time(), ctime()])
         conn.close()
 
     def build_model(self, data, nr_samples=200):
+        self.build_timer.start()
         # run block of code and catch warnings
         with warnings.catch_warnings():
             # ignore all caught warnings
@@ -64,13 +63,18 @@ class TrainModel():
             
             model = CTGAN()
             model.fit(data)
-            print("CTGAN model was fitted to input data.")
 
+            print("CTGAN model was fitted to input data.")
+            self.build_timer.stop()
+            self.building_time = self.build_timer.get_elapsed_time()
+            
             """
             Generate synthetic data from the model.
             """
+            # If using own test data, nr_samples should be 15 to be able to accurately compute the score.
             new_data = model.sample(nr_samples)
             print(f"New generated data: \n {new_data}")
+            self.eval = self.eval_model(data, new_data)
 
             """
             Saved file will not contain any information about the original data.
@@ -78,17 +82,17 @@ class TrainModel():
             """
             model.save(self.ctgan_model_path)
            
-
         # Write the used parameters and evaluation to csv file
-        #self.write_params_csv()
+        self.write_params_csv()
     
-    def eval_model(self, original_data, nr_samples=200):
+    def eval_model(self, original_data, new_data):
         with warnings.catch_warnings():
             # ignore all caught warnings
             warnings.filterwarnings("ignore")
-            loaded = CTGAN.load(self.ctgan_model_path)
-            new_data = loaded.sample(nr_samples)
+            #loaded = CTGAN.load(self.ctgan_model_path)
+            #new_data = loaded.sample(nr_samples)
             eval = evaluate(new_data, original_data)
+            print(f"evaluation of the model:\n {eval}")
             return eval
         
 
