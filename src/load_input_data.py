@@ -34,9 +34,7 @@ class InputDataLoader():
         #lens = pd.merge(movie_ratings, users)
 
         user_item_matrix = ratings_no_timestamp.pivot(*ratings_no_timestamp.columns)
-        user_item_matrix = user_item_matrix.fillna("")
-        #user_item_matrix = user_item_matrix.applymap(str)
-
+        #user_item_matrix = user_item_matrix.fillna("")
         user_item_matrix.columns = user_item_matrix.columns.astype(str)
         print(user_item_matrix)
         
