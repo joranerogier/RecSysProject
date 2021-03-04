@@ -30,8 +30,5 @@ def main():
     eval_userKNN = recsys.userKNN()
     print(f"Evaluation userKNN: {eval_userKNN}")
 
-
-
-
 if __name__ == "__main__":
     main()
