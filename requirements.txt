@@ -6,7 +6,7 @@ binpickle=0.3.3=pypi_0
 blas=1.0=mkl
 ca-certificates=2021.1.19=haa95532_0
 certifi=2020.12.5=py38haa95532_0
-cffi=1.14.4=py38hcd4344a_0
+cffi=1.14.4
 chardet=4.0.0=pypi_0
 click=7.1.2=pypi_0
 cloudpickle=1.6.0=pypi_0
@@ -29,7 +29,7 @@ llvmlite=0.34.0=pypi_0
 locket=0.2.1=pypi_0
 matplotlib=3.2.1=pypi_0
 mkl=2020.2=256
-mkl-service=2.3.0=py38h196d8e1_0
+mkl-service=2.3.0
 mkl_fft=1.2.0=py38h45dec08_0
 mkl_random=1.1.1=py38h47e9c7a_0
 msgpack=1.0.2=pypi_0
@@ -38,13 +38,13 @@ ninja=1.10.2=py38h6d14046_0
 numba=0.51.2=pypi_0
 numpy=1.20.0=pypi_0
 numpy-base=1.19.2=py38ha3acd2a_0
-openssl=1.1.1i=h2bbff1b_0
+openssl=1.1.1
 packaging=20.9=pypi_0
 pandas=1.1.4=pypi_0
 partd=1.1.0=pypi_0
 patsy=0.5.1=pypi_0
 pillow=8.1.0=pypi_0
-pip=20.3.3=py38haa95532_0
+pip=20.3.3
 pomegranate=0.13.4=pypi_0
 psutil=5.8.0=pypi_0
 pyarrow=3.0.0=pypi_0
@@ -64,7 +64,7 @@ sdmetrics=0.1.2=pypi_0
 sdv=0.7.0=pypi_0
 seaborn=0.10.1=pypi_0
 setuptools=52.0.0=py38haa95532_0
-six=1.15.0=py38haa95532_0
+six=1.15.0
 sklearn=0.0=pypi_0
 sktime=0.4.3=pypi_0
 sortedcontainers=2.3.0=pypi_0
@@ -81,9 +81,9 @@ tqdm=4.56.0=pypi_0
 tsfresh=0.17.0=pypi_0
 typing-extensions=3.7.4.3=pypi_0
 urllib3=1.26.3=pypi_0
-vc=14.2=h21ff451_1
+vc=14.2
 vs2015_runtime=14.27.29016=h5e58377_2
 wheel=0.36.2=pyhd3eb1b0_0
-wincertstore=0.2=py38_0
+wincertstore=0.2
 zict=2.0.0=pypi_0
-zlib=1.2.11=h62dcd97_4
+zlib=1.2.11

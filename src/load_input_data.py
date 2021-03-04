@@ -25,19 +25,30 @@ class InputDataLoader():
 
     def load_train_sparse_data(self):     
         # Own test input data to check if the pivot function works correctly. 
-        user_item_matrix = self.train_data_rec.pivot(*self.train_data_rec.columns)
+        '''user_item_matrix = self.train_data_rec.pivot(*self.train_data_rec.columns)
         user_item_matrix = user_item_matrix.fillna("")
         user_item_matrix.columns = user_item_matrix.columns.astype(str)
-        print(user_item_matrix.head())
+        print(user_item_matrix.head())'''
+        
+        # The sparse matrices for the ml100k and mini subset were stored locally, 
+        # since computing these took a lot of time. 
+        if self.input_data == "ml-100k":
+            user_item_matrix = f"{conf.DATA_DIR}/ml100k_sparse_train.csv"
+        elif self.input_data == "own":
+            user_item_matrix = f"{conf.DATA_DIR}/mini_ml100k_sparse_train.csv"
         return user_item_matrix
     
 
     def load_test_sparse_data(self):      
         # Own test input data to check if the pivot function works correctly.
-        user_item_matrix = self.test_data_rec.pivot(*self.test_data_rec.columns)
+        '''user_item_matrix = self.test_data_rec.pivot(*self.test_data_rec.columns)
         user_item_matrix = user_item_matrix.fillna("")
         user_item_matrix.columns = user_item_matrix.columns.astype(str)  
-        print(user_item_matrix.head()) 
+        print(user_item_matrix.head()) '''
+        if self.input_data == "ml-100k":
+            user_item_matrix = f"{conf.DATA_DIR}/ml100k_sparse_test.csv"
+        elif self.input_data == "own":
+            user_item_matrix = f"{conf.DATA_DIR}/mini_ml100k_sparse_test.csv"
         return user_item_matrix
 
 
@@ -58,9 +69,9 @@ class InputDataLoader():
             #ratings = pd.read_csv(f'{self.data_dir}u1.base', sep='\t', names=r_cols, encoding='latin-1')
             ml100k = ML100K('ml-100k')
             ratings = ml100k.ratings
-            ratings_no_timestamp = ratings[['user', 'item', 'rating']]
+            ratings = ratings[['user', 'item', 'rating']]
             
-        for train, test in xf.partition_users(ratings_no_timestamp, 1, xf.SampleFrac(0.2)):
+        for train, test in xf.partition_users(ratings, 1, xf.SampleFrac(0.2)):
             print("created train-test split")
             print(train.head())
             print(test.head())

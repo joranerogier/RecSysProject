@@ -22,7 +22,7 @@ def main():
     # Build and fit the CTGAN model to the input data
     m = TrainModel(dn="test eval", ctgan_model_path=ctgan_model_path)
     m.build_model(data_train=train_sparse)
-
+    
     # Apply the recommender system algorithm to the original and new data
     recsys = RecommenderSystem(train_rec, test_rec)
     eval_itemKNN =  recsys.itemKNN()
