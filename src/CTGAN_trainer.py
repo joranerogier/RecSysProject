@@ -27,8 +27,8 @@ class TrainModel():
         self.dataset_name = dn
 
         # Set the hyperparameter values 
-        self.epochs = 300 # Default value = 300
-        self.batch_size = 500 # Default value = 500 -> needs to be a multiple of 10
+        self.epochs = 1 # Default value = 300
+        self.batch_size = 200 #500 # Default value = 500 -> needs to be a multiple of 10
         self.generator_lr = 2e-4 # Default value = 2e-4
         self.generator_decay = 1e-6 # Default value = 1e-6
         self.discriminator_lr = 2e-4 # Default value = 2e-4

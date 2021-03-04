@@ -33,9 +33,10 @@ class InputDataLoader():
         # The sparse matrices for the ml100k and mini subset were stored locally, 
         # since computing these took a lot of time. 
         if self.input_data == "ml-100k":
-            user_item_matrix = f"{conf.DATA_DIR}/ml100k_sparse_train.csv"
+            user_item_matrix = pd.read_csv(f"{conf.DATA_DIR}/ml100k_sparse_train.csv")
         elif self.input_data == "own":
-            user_item_matrix = f"{conf.DATA_DIR}/mini_ml100k_sparse_train.csv"
+            user_item_matrix = pd.read_csv(f"{conf.DATA_DIR}/mini_ml100k_sparse_train.csv")
+        print(user_item_matrix)
         return user_item_matrix
     
 
@@ -46,9 +47,10 @@ class InputDataLoader():
         user_item_matrix.columns = user_item_matrix.columns.astype(str)  
         print(user_item_matrix.head()) '''
         if self.input_data == "ml-100k":
-            user_item_matrix = f"{conf.DATA_DIR}/ml100k_sparse_test.csv"
+            user_item_matrix = pd.read_csv(f"{conf.DATA_DIR}/ml100k_sparse_test.csv")
         elif self.input_data == "own":
-            user_item_matrix = f"{conf.DATA_DIR}/mini_ml100k_sparse_test.csv"
+            user_item_matrix = pd.read_csv(f"{conf.DATA_DIR}/mini_ml100k_sparse_test.csv")
+        print(user_item_matrix)
         return user_item_matrix
 
 
