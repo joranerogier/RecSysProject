@@ -5,6 +5,7 @@ from lenskit import crossfold as xf
 
 import conf
 
+nr_users_subset = 5
 ratings_mini = pd.read_csv(f"{conf.DATA_DIR}/mini_ml100k.csv", sep=',', encoding="latin-1")
 
 ml100k = ML100K('ml-100k')
@@ -23,5 +24,5 @@ def create_sparse_matrix(ratings, file_path_train, file_path_test):
         user_item_matrix_test.columns = user_item_matrix_test.columns.astype(str)
         user_item_matrix_test.to_csv(file_path_test)#, index=False)
 
-create_sparse_matrix(ratings_mini, f"{conf.DATA_DIR}/mini_ml100k_sparse_train.csv", f"{conf.DATA_DIR}/mini_ml100k_sparse_test.csv")
+create_sparse_matrix(ratings_mini, f"{conf.DATA_DIR}/mini_ml100k_{nr_users_subset}_users_sparse_train.csv", f"{conf.DATA_DIR}/mini_ml100k_{nr_users_subset}_users_sparse_test.csv")
 create_sparse_matrix(ratings_ml100k, f"{conf.DATA_DIR}/ml100k_sparse_train.csv",f"{conf.DATA_DIR}/ml100k_sparse_test.csv")
