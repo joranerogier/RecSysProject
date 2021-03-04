@@ -21,7 +21,7 @@ class TrainModel():
         # Write training progress to csv file
         check_dir(f'{conf.OUTPUT_DIR}/training_logs/')
         self.out_file = f'{conf.OUTPUT_DIR}/training_logs/CTGAN_training_log.csv'
-        check_csv_path(self.out_file, ['dataset_name', 'batch_size', 'generator_lr', 'generator_decay', 'discriminator_lr', 'discriminator_decay', 'evaluation', 'fitting time', 'epoch time', 'time'])
+        check_csv_path(self.out_file, ['dataset_name', 'batch_size', 'generator_lr', 'generator_decay', 'discriminator_lr', 'discriminator_decay', 'evaluation', 'fitting time', 'epoch time', 'time', 'nr_samples'])
         
         self.ctgan_model_path = ctgan_model_path
         self.dataset_name = dn
@@ -45,10 +45,10 @@ class TrainModel():
         self.build_timer = Timer()
         self.building_time = None  
 
-    def write_params_csv(self):
+    def write_params_csv(self, len_df):
         conn = open(self.out_file, 'a')
         writer = csv.writer(conn)
-        writer.writerow([self.dataset_name, self.batch_size, self.generator_lr, self.generator_decay, self.discriminator_lr, self.discriminator_decay, self.eval, self.building_time, time(), ctime()])
+        writer.writerow([self.dataset_name, self.batch_size, self.generator_lr, self.generator_decay, self.discriminator_lr, self.discriminator_decay, self.eval, self.building_time, time(), ctime(), len_df])
         conn.close()
 
     def build_model(self, data_train, nr_samples=200):
@@ -83,7 +83,7 @@ class TrainModel():
             model.save(self.ctgan_model_path)
            
         # Write the used parameters and evaluation to csv file
-        self.write_params_csv()
+        self.write_params_csv(len(data_train.columns))
     
     def eval_model(self, original_data, new_data):
         with warnings.catch_warnings():
