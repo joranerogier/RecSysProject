@@ -1,18 +1,21 @@
 import pandas as pd
 from sdv.demo import load_tabular_demo
 from timer import Timer
+from lenskit.datasets import ML100K
+from lenskit import crossfold as xf
 
 # import own scripts
 import conf
 
 class InputDataLoader():
     def __init__(self, input_data=""):
+        self.input_data = input_data
         if input_data == "demo":
             self.data = load_tabular_demo('student_placements') # demo data
-        elif input_data == "ml-100k":
-            self.data_dir = f"{conf.DATA_DIR}/ml-100k/"
-            self.train_data_rec = self.load_train_rec_data()
-            self.test_data_rec = self.load_test_rec_data()
+        elif input_data == "ml-100k" or input_data=="own":
+            #self.data_dir = f"{conf.DATA_DIR}/ml-100k/"
+            self.train_data_rec, self.test_data_rec = self.load_train_test_rec_data()
+            #self.test_data_rec = self.load_test_rec_data()
             self.train_data_sparse = self.load_train_sparse_data()
             self.test_data_sparse = self.load_test_sparse_data()
              
@@ -25,7 +28,7 @@ class InputDataLoader():
         user_item_matrix = self.train_data_rec.pivot(*self.train_data_rec.columns)
         user_item_matrix = user_item_matrix.fillna("")
         user_item_matrix.columns = user_item_matrix.columns.astype(str)
-
+        print(user_item_matrix.head())
         return user_item_matrix
     
 
@@ -33,35 +36,36 @@ class InputDataLoader():
         # Own test input data to check if the pivot function works correctly.
         user_item_matrix = self.test_data_rec.pivot(*self.test_data_rec.columns)
         user_item_matrix = user_item_matrix.fillna("")
-        user_item_matrix.columns = user_item_matrix.columns.astype(str)
-             
+        user_item_matrix.columns = user_item_matrix.columns.astype(str)  
+        print(user_item_matrix.head()) 
         return user_item_matrix
 
 
-    def load_train_rec_data(self):
-        #FROM: http://www.gregreda.com/2013/10/26/using-pandas-on-the-movielens-dataset/
-        r_cols = ['user_id', 'movie_id', 'rating', 'unix_timestamp']
-
-        #ratings = pd.read_csv(f'{self.data_dir}u1.base', sep='\t', names=r_cols, encoding='latin-1')
-        ratings = pd.read_csv(f"{conf.DATA_DIR}/test_train_input_data.csv", sep=';', names=r_cols, encoding="latin-1")
+    def load_train_test_rec_data(self):
+        '''
+        if (self.input_data == "own"):
+            r_cols = ['user', 'item', 'rating', 'unix_timestamp']
+            ratings_train = pd.read_csv(f"{conf.DATA_DIR}/test_train_input_data.csv", sep=';', names=r_cols, encoding="latin-1")
+            ratings_test = pd.read_csv(f"{conf.DATA_DIR}/test_test_input_data.csv", sep=';', names=r_cols, encoding="latin-1")
+            return ratings_train[['user', 'item', 'rating']], ratings_test[['user', 'item', 'rating']]
         
-        ratings_no_timestamp = ratings[['user_id', 'movie_id', 'rating']]
-        ratings_no_timestamp = ratings_no_timestamp.rename(columns={'user_id': 'user', 'movie_id': 'item'})
+        else:
+        '''
 
-        return ratings_no_timestamp
-
-    def load_test_rec_data(self):
-        #FROM: http://www.gregreda.com/2013/10/26/using-pandas-on-the-movielens-dataset/
-        r_cols = ['user_id', 'movie_id', 'rating', 'unix_timestamp']
+        if(self.input_data == "own"):
+            ratings = pd.read_csv(f"{conf.DATA_DIR}/mini_ml100k.csv", sep=',', encoding="latin-1")
+        else:
+            #ratings = pd.read_csv(f'{self.data_dir}u1.base', sep='\t', names=r_cols, encoding='latin-1')
+            ml100k = ML100K('ml-100k')
+            ratings = ml100k.ratings
+            ratings_no_timestamp = ratings[['user', 'item', 'rating']]
+            
+        for train, test in xf.partition_users(ratings_no_timestamp, 1, xf.SampleFrac(0.2)):
+            print("created train-test split")
+            print(train.head())
+            print(test.head())
+            return train, test
         
-        #ratings = pd.read_csv(f'{self.data_dir}u1.test', sep='\t', names=r_cols, encoding='latin-1')
-        ratings = pd.read_csv(f"{conf.DATA_DIR}/test_test_input_data.csv", sep=';', names=r_cols, encoding="latin-1")
-       
-        ratings_no_timestamp = ratings[['user_id', 'movie_id', 'rating']]
-        ratings_no_timestamp = ratings_no_timestamp.rename(columns={'user_id': 'user', 'movie_id': 'item'})
-
-        return ratings_no_timestamp
-
     def get_train_rec_data(self):
         return self.train_data_rec
     

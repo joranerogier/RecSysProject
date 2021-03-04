@@ -17,16 +17,13 @@ import conf
 from check_existence_dir_csv import check_dir, check_csv_path
 
 class TrainModel():
-    def __init__(self, dn, ctgan_dir):
+    def __init__(self, dn, ctgan_model_path):
         # Write training progress to csv file
         check_dir(f'{conf.OUTPUT_DIR}/training_logs/')
         self.out_file = f'{conf.OUTPUT_DIR}/training_logs/CTGAN_training_log.csv'
         check_csv_path(self.out_file, ['dataset_name', 'batch_size', 'generator_lr', 'generator_decay', 'discriminator_lr', 'discriminator_decay', 'evaluation', 'fitting time', 'epoch time', 'time'])
         
-        self.ctgan_dir = ctgan_dir
-        check_dir(self.ctgan_dir)
-
-        self.ctgan_model_path = f'{self.ctgan_dir}test_model.pkl'
+        self.ctgan_model_path = ctgan_model_path
         self.dataset_name = dn
 
         # Set the hyperparameter values 
@@ -54,7 +51,7 @@ class TrainModel():
         writer.writerow([self.dataset_name, self.batch_size, self.generator_lr, self.generator_decay, self.discriminator_lr, self.discriminator_decay, self.eval, self.building_time, time(), ctime()])
         conn.close()
 
-    def build_model(self, data, nr_samples=200):
+    def build_model(self, data_train, nr_samples=200):
         self.build_timer.start()
         # run block of code and catch warnings
         with warnings.catch_warnings():
@@ -62,7 +59,7 @@ class TrainModel():
             warnings.filterwarnings("ignore")
             
             model = CTGAN()
-            model.fit(data)
+            model.fit(data_train)
 
             print("CTGAN model was fitted to input data.")
             self.build_timer.stop()
@@ -71,10 +68,13 @@ class TrainModel():
             """
             Generate synthetic data from the model.
             """
-            # If using own test data, nr_samples should be 15 to be able to accurately compute the score.
+            # If using own test data, nr_samples should be equal to nr of samples of the provided data
+            # to be able to accurately compute the eval-score.
+            if (len(data_train.columns) < 200):
+                nr_samples = len(data_train.columns)
             new_data = model.sample(nr_samples)
             print(f"New generated data: \n {new_data}")
-            self.eval = self.eval_model(data, new_data)
+            self.eval = self.eval_model(data_train, new_data)
 
             """
             Saved file will not contain any information about the original data.

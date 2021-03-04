@@ -12,47 +12,57 @@ from lenskit.metrics.predict import rmse
 from load_input_data import InputDataLoader
 from lenskit import batch, topn, util
 
+
 # import own scripts
 import conf
 from check_existence_dir_csv import check_dir, check_csv_path
 
 class RecommenderSystem():
-    def __init__(self):
+    def __init__(self, train_data, test_data):
         self.num_recs = 10
         self.max_nbrs = 15 # "reasonable default"
         self.min_nbrs = 3 # "reasonable default"
 
+        """
+        For the moment, no cross validation is used.
+        Thus, the train & test data are just set globally.
+        """
+        self.train, self.test = train_data, test_data
+
+
+    def eval(self, aname, algo):
+        fittable = util.clone(algo)
+        fittable = Recommender.adapt(fittable)
+        fittable.fit(self.train)
+        users = self.test.user.unique()
+        recs = batch.recommend(fittable, users, self.num_recs)
+        recs['Algorithm'] = aname
+        return recs
+
+    def analyze_performance(self, recs):
+        rla = topn.RecListAnalysis()
+        rla.add_metric(topn.ndcg)
+        results = rla.compute(recs, self.test)
+        print(results.head)
+        return results
+
     def itemKNN(self):
-        item_knn.ItemItem()
-        pass
-
-    def fitUserKNN(self, data):
-        user_user = user_knn.UserUser(self.max_nbrs, self.min_nbrs)
-        algo = Recommender.adapt(user_user)
-        algo.fit(data)
+        algoname = "itemKNN"
+        item_item = item_knn.ItemItem(self.max_nbrs, self.min_nbrs)
+        eval = self.eval(algoname, item_item)
         print("UserKNN was fitted.")
-    
-    def predictUserKNN(self, algo):
-        recs = algo.recommend(-1, self.num_recs, )
+        print(eval)
+        return eval
 
+    def userKNN(self):
+        algoname = "userKNN"
+        user_user = user_knn.UserUser(self.max_nbrs, self.min_nbrs)
+        eval = self.eval(algoname, user_user)
+        print("UserKNN was fitted.")
+        print(eval)
+        return eval
 
     def BPRMF(self):
         # Bayesian personalized ranking matrix factorization
         pass
 
-num_recs = 5
-max_nbrs = 15 # "reasonable default"
-min_nbrs = 3 # "reasonable default"
-
-data_loader = InputDataLoader("ml-100k")
-train_rec = data_loader.get_train_rec_data()
-test_rec = data_loader.get_test_rec_data()
-
-user_user = user_knn.UserUser(max_nbrs, min_nbrs)
-fittable = util.clone(user_user)
-fittable = Recommender.adapt(fittable)
-fittable.fit(train_rec)
-users = test_rec.user.unique()
-print(users)
-recs = batch.recommend(fittable, users, num_recs)
-print(recs)
