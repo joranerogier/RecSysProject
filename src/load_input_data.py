@@ -10,6 +10,9 @@ import conf
 class InputDataLoader():
     def __init__(self, input_data=""):
         self.input_data = input_data
+        self.nr_users = 5
+        self.nr_items = 100
+
         if input_data == "demo":
             self.data = load_tabular_demo('student_placements') # demo data
         elif input_data == "ml-100k" or input_data=="own":
@@ -18,7 +21,6 @@ class InputDataLoader():
             #self.test_data_rec = self.load_test_rec_data()
             self.train_data_sparse = self.load_train_sparse_data()
             self.test_data_sparse = self.load_test_sparse_data()
-             
         else:
             print("Dataset was not provided or implementation is not yet prepared to handle this dataset.\nPlease try ml-100k or demo dataset.")
 
@@ -35,7 +37,7 @@ class InputDataLoader():
         if self.input_data == "ml-100k":
             user_item_matrix = pd.read_csv(f"{conf.DATA_DIR}/ml100k_sparse_train.csv")
         elif self.input_data == "own":
-            user_item_matrix = pd.read_csv(f"{conf.DATA_DIR}/mini_ml100k_sparse_train.csv")
+            user_item_matrix = pd.read_csv(f"{conf.DATA_DIR}/mini_ml100k_{self.nr_users}_users_{self.nr_items}_items_sparse_train.csv")
         print(user_item_matrix)
         return user_item_matrix
     
@@ -49,7 +51,7 @@ class InputDataLoader():
         if self.input_data == "ml-100k":
             user_item_matrix = pd.read_csv(f"{conf.DATA_DIR}/ml100k_sparse_test.csv")
         elif self.input_data == "own":
-            user_item_matrix = pd.read_csv(f"{conf.DATA_DIR}/mini_ml100k_sparse_test.csv")
+            user_item_matrix = pd.read_csv(f"{conf.DATA_DIR}/mini_ml100k_{self.nr_users}_users_{self.nr_items}_items_sparse_test.csv")
         print(user_item_matrix)
         return user_item_matrix
 
@@ -66,7 +68,7 @@ class InputDataLoader():
         '''
 
         if(self.input_data == "own"):
-            ratings = pd.read_csv(f"{conf.DATA_DIR}/mini_ml100k.csv", sep=',', encoding="latin-1")
+            ratings = pd.read_csv(f"{conf.DATA_DIR}/mini_ml100k_{self.nr_users}_users_{self.nr_items}_items.csv", sep=',', encoding="latin-1")
         else:
             #ratings = pd.read_csv(f'{self.data_dir}u1.base', sep='\t', names=r_cols, encoding='latin-1')
             ml100k = ML100K('ml-100k')
