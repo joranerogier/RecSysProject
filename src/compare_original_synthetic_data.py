@@ -38,7 +38,7 @@ class DataComparison():
         return sparsity
 
     def write_values_csv(self):
-        current_date = datetime.date.today().strftime('%dm%y_%H%M')
+        current_date = datetime.datetime.now().strftime('%d%m%y_%H%M')
         conn = open(self.comparison_file_path, 'a')
         writer = csv.writer(conn)
         writer.writerow([current_date, self.nr_users_orig, self.nr_users_syn, self.nr_items_orig, self.nr_items_syn, self.sparseness_orig, self.sparseness_syn])
