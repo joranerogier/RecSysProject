@@ -8,15 +8,13 @@ from check_existence_dir_csv import check_csv_path
 import datetime
 
 class DataComparison():
-    def __init__(self, orig, syn, file_path):
+    def __init__(self, orig, syn):
         self.sparseness_orig = self.calculate_sparseness(orig)
         self.sparseness_syn = self.calculate_sparseness(syn)
         self.nr_users_orig = self.get_nr_users(orig)
         self.nr_users_syn = self.get_nr_users(syn)
         self.nr_items_orig = self.get_nr_items(orig)
         self.nr_items_syn = self.get_nr_items(syn)
-        self.comparison_file_path = file_path
-        check_csv_path(self.comparison_file_path, ['date', 'nr_users_orig', 'nr_user_syn', 'nr_items_orig', 'nr_items_syn', 'sparseness_orig', 'sparseness_syn'])
 
     def get_nr_non_empty_cells(self, df):
         # Returns the number of non-empty cells in the given dataset.
@@ -37,15 +35,12 @@ class DataComparison():
         sparsity = (1 + non_empty) / (self.get_nr_users(data) * self.get_nr_items(data))
         return sparsity
 
-    def write_values_csv(self):
-        current_date = datetime.datetime.now().strftime('%d%m%y_%H%M')
-        conn = open(self.comparison_file_path, 'a')
-        writer = csv.writer(conn)
-        writer.writerow([current_date, self.nr_users_orig, self.nr_users_syn, self.nr_items_orig, self.nr_items_syn, self.sparseness_orig, self.sparseness_syn])
-        conn.close()
+    def get_values_csv(self):
+        values = [self.nr_users_orig, self.nr_users_syn, self.nr_items_orig, self.nr_items_syn, self.sparseness_orig, self.sparseness_syn]
+        return values
 
     def get_comparison_df(self):
-        data = {'Characteristic': ['Nr_users', 'Nr_item', 'Sparseness'],
+        data = {'Characteristic': ['Nr_users', 'Nr_items', 'Sparseness'],
                 'Orig': [self.nr_users_orig, self.nr_items_orig, self.sparseness_orig],
                 'Syn': [self.nr_users_syn, self.nr_items_syn, self.sparseness_syn]}
 

@@ -1,7 +1,7 @@
 # TODO: add arguments to change variables directly.
 import pandas as pd
 import argparse
-import datetime
+import csv
 
 # Import own packages
 from CTGAN_trainer import TrainModel
@@ -12,29 +12,43 @@ from load_synthetic_data import SyntheticDataLoader
 import conf 
 from compare_original_synthetic_data import DataComparison
 
+def write_to_csv(file_path, values):
+    with open(file_path, mode="a") as f:
+        csv_writer = csv.writer(f)
+        csv_writer.writerow(values)
+    f.close()
+
+
 def main(epochs, input_data, model_file_name, input_file, comparison_file_name):
+    # Check and set directories/paths for the CTGAN models
     ctgan_dir = f"{conf.OUTPUT_DIR}CTGAN_models/"
     check_dir(ctgan_dir)
     ctgan_model_path = f'{ctgan_dir}{model_file_name}'
 
-    comparison_dir = f"{conf.OUTPUT_DIR}comparison_logs/"
-    check_dir(comparison_dir)
-    comparison_path = f"{comparison_dir}{comparison_file_name}"
+    # Check and set directories/paths for the training & comparison results
+    check_dir(f'{conf.OUTPUT_DIR}/training_comparison_logs/')
+    logging_file = f'{conf.OUTPUT_DIR}/training_comparison_logs/{comparison_file_name}'
+    check_csv_path(logging_file, ['date', 'epoch_date', 'dataset_name', 'nr_epochs', 'batch_size', 'generator_lr', 'generator_decay', 'discriminator_lr', 'discriminator_decay', 'evaluation', 'fitting time', 'nr_users_orig', 'nr_user_syn', 'nr_items_orig', 'nr_items_syn', 'sparseness_orig', 'sparseness_syn'])
 
     data_loader = InputDataLoader(input_data, input_file)
-
     input_data = data_loader.get_sparse_data()
 
     # Build and fit the CTGAN model to the input data
-    m = TrainModel(dn="test eval", ctgan_model_path=ctgan_model_path)
+    m = TrainModel(dn="test eval", ctgan_model_path=ctgan_model_path, nr_epochs=epochs)
     m.build_model(data_train=input_data)
 
     new_data = m.get_new_data()
     
-    df_comparison = DataComparison(input_data, new_data, comparison_path)
+    # Get and print comparison dataframe
+    df_comparison = DataComparison(input_data, new_data)
     comp = df_comparison.get_comparison_df()
     print(comp)
-    df_comparison.write_values_csv()
+    
+    # Log training and comparison results
+    training_values = m.get_params_csv()
+    comparison_values = df_comparison.get_values_csv()
+    all_values = training_values + comparison_values
+    write_to_csv(logging_file, all_values)
     
     '''# Load the synthetic data. Nr of samples should be the same as original data.
     nr_samples = len(input_data.columns)
