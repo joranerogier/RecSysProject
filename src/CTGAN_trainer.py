@@ -59,7 +59,9 @@ class TrainModel():
             # ignore all caught warnings
             warnings.filterwarnings("ignore")
             
-            model = CTGAN()
+            model = CTGAN(
+                epochs=self.epochs
+            )
             model.fit(data_train)
 
             print("CTGAN model was fitted to input data.")
