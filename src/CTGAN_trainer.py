@@ -43,7 +43,8 @@ class TrainModel():
         
         self.eval = 0
         self.build_timer = Timer()
-        self.building_time = None  
+        self.building_time = None 
+        self.new_data = None
 
     def write_params_csv(self, len_df):
         conn = open(self.out_file, 'a')
@@ -68,13 +69,9 @@ class TrainModel():
             """
             Generate synthetic data from the model.
             """
-            # If using own test data, nr_samples should be equal to nr of samples of the provided data
-            # to be able to accurately compute the eval-score.
-            if (len(data_train.columns) < 200):
-                nr_samples = len(data_train.columns)
-            new_data = model.sample(nr_samples)
-            print(f"New generated data: \n {new_data}")
-            self.eval = self.eval_model(data_train, new_data)
+            self.new_data = model.sample(len(data_train))
+            print(f"New generated data: \n {self.new_data}")
+            self.eval = self.eval_model(data_train, self.new_data)
 
             """
             Saved file will not contain any information about the original data.
@@ -94,6 +91,9 @@ class TrainModel():
             eval = evaluate(new_data, original_data)
             print(f"evaluation of the model:\n {eval}")
             return eval
+
+    def get_new_data(self):
+        return self.new_data
         
 
 
