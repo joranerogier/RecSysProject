@@ -20,9 +20,10 @@ class Timer:
         if self._start_time is None:
             raise TimerError(f"Timer is not running. Use .start() to start it")
 
-        self.elapsed_time = time.perf_counter() - self._start_time
+        elapsed_time = time.perf_counter() - self._start_time
+        self.elapsed_time = f"{elapsed_time:0.4f}"
         self._start_time = None
-        print(f"Elapsed time: {self.elapsed_time:0.4f} seconds")
+        print(f"Elapsed time: {elapsed_time:0.4f} seconds")
 
     def get_elapsed_time(self):
         return self.elapsed_time

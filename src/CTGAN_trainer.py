@@ -10,7 +10,7 @@ import warnings
 from sdv.tabular import CTGAN
 from sdv.evaluation import evaluate
 from timer import Timer
-from time import ctime
+from time import time
 import datetime
 
 # import own scripts
@@ -49,7 +49,7 @@ class TrainModel():
 
     def get_params_csv(self):
         current_date = datetime.datetime.now().strftime('%d%m%y_%H%M')
-        params = [current_date, ctime(), self.dataset_name, self.epochs, self.batch_size, self.generator_lr, self.generator_decay, self.discriminator_lr, self.discriminator_decay, self.eval, self.building_time]
+        params = [current_date, time(), self.dataset_name, self.epochs, self.batch_size, self.generator_lr, self.generator_decay, self.discriminator_lr, self.discriminator_decay, self.eval, self.building_time]
         return params
 
     def build_model(self, data_train, nr_samples=200):

@@ -28,7 +28,7 @@ def main(epochs, input_data, model_file_name, input_file, comparison_file_name):
     # Check and set directories/paths for the training & comparison results
     check_dir(f'{conf.OUTPUT_DIR}/training_comparison_logs/')
     logging_file = f'{conf.OUTPUT_DIR}/training_comparison_logs/{comparison_file_name}'
-    check_csv_path(logging_file, ['date', 'epoch_date', 'dataset_name', 'nr_epochs', 'batch_size', 'generator_lr', 'generator_decay', 'discriminator_lr', 'discriminator_decay', 'evaluation', 'fitting time', 'nr_users_orig', 'nr_user_syn', 'nr_items_orig', 'nr_items_syn', 'sparseness_orig', 'sparseness_syn'])
+    check_csv_path(logging_file, ['date', 'epoch_date', 'dataset_name', 'nr_epochs', 'batch_size', 'generator_lr', 'generator_decay', 'discriminator_lr', 'discriminator_decay', 'evaluation', 'fitting time (s)', 'nr_users_orig', 'nr_user_syn', 'nr_items_orig', 'nr_items_syn', 'sparseness_orig', 'sparseness_syn'])
 
     data_loader = InputDataLoader(input_data, input_file)
     input_data = data_loader.get_sparse_data()
