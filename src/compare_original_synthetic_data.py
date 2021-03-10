@@ -32,7 +32,7 @@ class DataComparison():
     def calculate_sparseness(self, data):
         #Sparsity = 1 + len (data) / (#users * #items)
         non_empty = self.get_nr_non_empty_cells(data)
-        sparsity = (1 + non_empty) / (self.get_nr_users(data) * self.get_nr_items(data))
+        sparsity = 1 - (non_empty / (self.get_nr_users(data) * self.get_nr_items(data)))
         return sparsity
 
     def get_values_csv(self):
