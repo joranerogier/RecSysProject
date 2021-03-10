@@ -7,7 +7,7 @@ import conf
 class SyntheticDataLoader():
     def __init__(self, c_date):
         self.current_date = c_date
-        self.data_sparse_path = f'{conf.SYN_DATA_DIR}{c_date}.csv'
+        self.data_sparse_path = f'{conf.SYN_DATA_DIR}syn_sparse_{c_date}.csv'
         self.data_dense = self.transform_to_dense_data()
         self.train_data_rec, self.test_data_rec = self.create_train_test_rec_data()
 
