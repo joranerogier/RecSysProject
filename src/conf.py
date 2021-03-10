@@ -8,3 +8,6 @@ OUTPUT_DIR = f'{ROOT_DIR}/output/'
 check_dir(OUTPUT_DIR)
 
 DATA_DIR = f'{ROOT_DIR}/data/'
+
+SYN_DATA_DIR = f'{OUTPUT_DIR}/synthetic_data/'
+check_dir(SYN_DATA_DIR)

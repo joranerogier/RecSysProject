@@ -11,18 +11,20 @@ from sdv.tabular import CTGAN
 from sdv.evaluation import evaluate
 from timer import Timer
 from time import time
-import datetime
+import numpy as np
+import torch
 
 # import own scripts
 import conf
 from check_existence_dir_csv import check_dir, check_csv_path
 
 class TrainModel():
-    def __init__(self, dn, ctgan_model_path, nr_epochs):
+    def __init__(self, dn, ctgan_model_path, nr_epochs, curr_date):
         # Write training progress to csv file
         '''check_dir(f'{conf.OUTPUT_DIR}/training_logs/')
         self.out_file = f'{conf.OUTPUT_DIR}/training_logs/CTGAN_training_log.csv'
         check_csv_path(self.out_file, ['date', 'dataset_name', 'epoch', 'score'])'''
+        self.current_date = curr_date
         
         self.ctgan_model_path = ctgan_model_path
         self.dataset_name = dn
@@ -48,8 +50,7 @@ class TrainModel():
         self.new_data = None
 
     def get_params_csv(self):
-        current_date = datetime.datetime.now().strftime('%d%m%y_%H%M')
-        params = [current_date, time(), self.dataset_name, self.epochs, self.batch_size, self.generator_lr, self.generator_decay, self.discriminator_lr, self.discriminator_decay, self.eval, self.building_time]
+        params = [self.current_date, time(), self.dataset_name, self.epochs, self.batch_size, self.generator_lr, self.generator_decay, self.discriminator_lr, self.discriminator_decay, self.eval, self.building_time]
         return params
 
     def build_model(self, data_train, nr_samples=200):
@@ -58,7 +59,11 @@ class TrainModel():
         with warnings.catch_warnings():
             # ignore all caught warnings
             warnings.filterwarnings("ignore")
-            
+
+            # Set seed to ensure reproducibility
+            torch.manual_seed(0)
+            np.random.seed(0)
+
             model = CTGAN(
                 epochs=self.epochs
             )
@@ -73,6 +78,7 @@ class TrainModel():
             """
             self.new_data = model.sample(len(data_train))
             print(f"New generated data: \n {self.new_data}")
+            self.new_data.fillna("").to_csv(f"{conf.SYN_DATA_DIR}syn_sparse_{self.current_date}.csv", index=False)
             self.eval = self.eval_model(data_train, self.new_data)
 
             """

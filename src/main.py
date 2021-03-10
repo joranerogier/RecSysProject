@@ -2,6 +2,7 @@
 import pandas as pd
 import argparse
 import csv
+import datetime
 
 # Import own packages
 from CTGAN_trainer import TrainModel
@@ -33,8 +34,10 @@ def main(epochs, input_data, model_file_name, input_file, comparison_file_name):
     data_loader = InputDataLoader(input_data, input_file)
     input_data = data_loader.get_sparse_data()
 
+    datetime_now = datetime.datetime.now().strftime('%d%m%y_%H%M')
+
     # Build and fit the CTGAN model to the input data
-    m = TrainModel(dn="test eval", ctgan_model_path=ctgan_model_path, nr_epochs=epochs)
+    m = TrainModel(dn="test eval", ctgan_model_path=ctgan_model_path, nr_epochs=epochs, curr_date=datetime_now)
     m.build_model(data_train=input_data)
 
     new_data = m.get_new_data()
@@ -50,17 +53,17 @@ def main(epochs, input_data, model_file_name, input_file, comparison_file_name):
     all_values = training_values + comparison_values
     write_to_csv(logging_file, all_values)
     
-    '''# Load the synthetic data. Nr of samples should be the same as original data.
-    nr_samples = len(input_data.columns)
-    synthetic_data_loader = SyntheticDataLoader(ctgan_model_path, nr_samples)
+    # Load the synthetic data (split in train & test set)
+    nr_samples = len(input_data)
+    synthetic_data_loader = SyntheticDataLoader(datetime_now)
     syn_train, syn_test = synthetic_data_loader.get_train_test_data()
 
     # Apply the recommender system algorithm to the original and new data
-    recsys = RecommenderSystem(syn_train, syn_test)
-    eval_itemKNN =  recsys.itemKNN()
-    print(f"Evaluation itemKNN: {eval_itemKNN}")    
-    eval_userKNN = recsys.userKNN()
-    print(f"Evaluation userKNN: {eval_userKNN}")'''
+    #recsys = RecommenderSystem(syn_train, syn_test)
+    #eval_itemKNN =  recsys.itemKNN()
+    #print(f"Evaluation itemKNN: {eval_itemKNN}")    
+    #eval_userKNN = recsys.userKNN()
+    #print(f"Evaluation userKNN: {eval_userKNN}")
 
 if __name__ == "__main__":
     ap = argparse.ArgumentParser()
