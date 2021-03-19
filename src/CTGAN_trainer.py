@@ -3,8 +3,6 @@ This is the CTGAN Training class module.
 The hyperparameters and paths/directories can be changed in the __init__ function if needed
 # TODO: Create settings file with the hyperparameter values for a better overview (or give as arguments)
 """ 
-
-
 import csv
 import warnings
 from sdv.tabular import CTGAN
@@ -79,7 +77,7 @@ class TrainModel():
             self.new_data = model.sample(len(data_train))
             print(f"New generated data: \n {self.new_data}")
             self.new_data.fillna("").to_csv(f"{conf.SYN_DATA_DIR}syn_sparse_{self.current_date}.csv", index=False)
-            self.eval = self.eval_model(data_train, self.new_data)
+            #self.eval = self.eval_model(data_train, self.new_data)
 
             """
             Saved file will not contain any information about the original data.
