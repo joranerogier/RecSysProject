@@ -11,3 +11,6 @@ DATA_DIR = f'{ROOT_DIR}/data/'
 
 SYN_DATA_DIR = f'{OUTPUT_DIR}/synthetic_data/'
 check_dir(SYN_DATA_DIR)
+
+PARTITIONED_DATA_DIR = f'{OUTPUT_DIR}/partitioned_data/'
+check_dir(PARTITIONED_DATA_DIR)

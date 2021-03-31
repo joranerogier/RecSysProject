@@ -29,7 +29,7 @@ class TrainModel():
 
         # Set the hyperparameter values 
         self.epochs = nr_epochs # Default value = 300
-        self.batch_size = 200 #500 # Default value = 500 -> needs to be a multiple of 10
+        self.batch_size = 500 #500 # Default value = 500 -> needs to be a multiple of 10
         self.generator_lr = 2e-4 # Default value = 2e-4
         self.generator_decay = 1e-6 # Default value = 1e-6
         self.discriminator_lr = 2e-4 # Default value = 2e-4
@@ -51,7 +51,7 @@ class TrainModel():
         params = [self.current_date, time(), self.dataset_name, self.epochs, self.batch_size, self.generator_lr, self.generator_decay, self.discriminator_lr, self.discriminator_decay, self.eval, self.building_time]
         return params
 
-    def build_model(self, data_train, nr_samples=200):
+    def build_model(self, data_train, nr_samples=200, user_part=""):
         self.build_timer.start()
         # run block of code and catch warnings
         with warnings.catch_warnings():
@@ -75,8 +75,17 @@ class TrainModel():
             Generate synthetic data from the model.
             """
             self.new_data = model.sample(len(data_train))
-            print(f"New generated data: \n {self.new_data}")
-            self.new_data.fillna("").to_csv(f"{conf.SYN_DATA_DIR}syn_sparse_{self.current_date}.csv", index=False)
+            print(f"New generated data [partition = {user_part}]: \n {self.new_data}")
+
+            # check if active/inactive user partition is used, to save the file accordingly
+            if (user_part == ""):
+                self.new_data.fillna("").to_csv(f"{conf.SYN_DATA_DIR}syn_sparse_{self.current_date}.csv", index=False)
+            elif (user_part == "active"):
+                self.new_data.fillna("").to_csv(f"{conf.SYN_DATA_DIR}syn_sparse_{self.current_date}_active.csv", index=False)
+            elif (user_part == "inactive"):
+                self.new_data.fillna("").to_csv(f"{conf.SYN_DATA_DIR}syn_sparse_{self.current_date}_inactive.csv", index=False)
+            else:
+                print("[WARNING] Synthetic data is not saved to file.")
             #self.eval = self.eval_model(data_train, self.new_data)
 
             """
