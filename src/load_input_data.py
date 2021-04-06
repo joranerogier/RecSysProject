@@ -10,7 +10,6 @@ import conf
 class InputDataLoader():
     def __init__(self, input_data="", input_path=""):
         self.input_data = input_data
-        print(self.input_data)
         if input_data == "demo":
             self.data = load_tabular_demo('student_placements') # demo data
         elif input_data == "ml-100k" or input_data=="own":

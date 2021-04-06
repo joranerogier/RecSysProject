@@ -13,7 +13,7 @@ class PartitionedInputDataLoader():
         self.max_active = 1000 # 30 for "own" dataset
         self.min_active = 350 # only 33 users # 5 for "own dataset"
         self.input_data = input_data
-        print(self.input_data)
+        
         if input_data == "demo":
             self.data = load_tabular_demo('student_placements') # demo data
         elif input_data == "ml-100k" or input_data=="own":

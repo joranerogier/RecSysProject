@@ -63,7 +63,8 @@ class TrainModel():
             np.random.seed(0)
 
             model = CTGAN(
-                epochs=self.epochs
+                epochs=self.epochs, 
+                batch_size=self.batch_size
             )
             model.fit(data_train)
 
@@ -93,6 +94,7 @@ class TrainModel():
             Thus, it is safe to share with others.
             """
             model.save(self.ctgan_model_path)
+            print(f"Model is saved to: {self.ctgan_model_path}")
     
     def eval_model(self, original_data, new_data):
         with warnings.catch_warnings():
