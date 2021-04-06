@@ -17,7 +17,7 @@ import conf
 from check_existence_dir_csv import check_dir, check_csv_path
 
 class TrainModel():
-    def __init__(self, dn, ctgan_model_path, nr_epochs, curr_date):
+    def __init__(self, dn, ctgan_model_path, nr_epochs, curr_date, batch_size):
         # Write training progress to csv file
         '''check_dir(f'{conf.OUTPUT_DIR}/training_logs/')
         self.out_file = f'{conf.OUTPUT_DIR}/training_logs/CTGAN_training_log.csv'
@@ -29,7 +29,7 @@ class TrainModel():
 
         # Set the hyperparameter values 
         self.epochs = nr_epochs # Default value = 300
-        self.batch_size = 500 #500 # Default value = 500 -> needs to be a multiple of 10
+        self.batch_size = batch_size #500 # Default value = 500 -> needs to be a multiple of 10
         self.generator_lr = 2e-4 # Default value = 2e-4
         self.generator_decay = 1e-6 # Default value = 1e-6
         self.discriminator_lr = 2e-4 # Default value = 2e-4

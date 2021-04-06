@@ -22,7 +22,7 @@ def write_to_csv(file_path, values):
     f.close()
 
 
-def main(epochs, input_data, model_file_name, input_file, comparison_file_name, p):
+def main(epochs, input_data, model_file_name, input_file, comparison_file_name, p, bs):
     # Check and set directories/paths for the CTGAN models
     ctgan_dir = f"{conf.OUTPUT_DIR}CTGAN_models/"
     check_dir(ctgan_dir)
@@ -46,7 +46,7 @@ def main(epochs, input_data, model_file_name, input_file, comparison_file_name, 
 
         # Build and fit the CTGAN model to the input data
         ctgan_model_path = f'{ctgan_dir}{model_file_name}.pkl'
-        m = TrainModel(dn="test", ctgan_model_path=ctgan_model_path, nr_epochs=epochs, curr_date=datetime_now)
+        m = TrainModel(dn="test", ctgan_model_path=ctgan_model_path, nr_epochs=epochs, curr_date=datetime_now, batch_size=bs)
         m.build_model(data_train=input_data)
 
         new_data = m.get_new_data()
@@ -71,14 +71,14 @@ def main(epochs, input_data, model_file_name, input_file, comparison_file_name, 
         inactive_ctgan_model_path = f'{ctgan_dir}{model_file_name}_inactive.pkl'
         
         # CTGAN model for active users
-        m_active = TrainModel(dn="test eval", ctgan_model_path=active_ctgan_model_path, nr_epochs=epochs, curr_date=datetime_now)
+        m_active = TrainModel(dn="test eval", ctgan_model_path=active_ctgan_model_path, nr_epochs=epochs, curr_date=datetime_now, batch_size=bs)
         m_active.build_model(data_train=input_data_active, user_part="active")
         new_data_active = m_active.get_new_data()
         print(f"NEW DATA HERE: {new_data_active}")
         new_data_active.fillna("").to_csv(f"{syn_sparse_path_active}", index=False)
         
         # CTGAN model for inactive users
-        m_inactive = TrainModel(dn="test eval", ctgan_model_path=inactive_ctgan_model_path, nr_epochs=epochs, curr_date=datetime_now)
+        m_inactive = TrainModel(dn="test eval", ctgan_model_path=inactive_ctgan_model_path, nr_epochs=epochs, curr_date=datetime_now, batch_size=bs)
         m_inactive.build_model(data_train=input_data_inactive, user_part="inactive")
         new_data_inactive = m_inactive.get_new_data()
         new_data_inactive.fillna("").to_csv(f"{syn_sparse_path_inactive}", index=False)
@@ -122,13 +122,15 @@ if __name__ == "__main__":
     ap = argparse.ArgumentParser()
     ap.add_argument("-E", "--epochs", type=int, help="Nr. of epochs for training the CTGAN model", default=1)
     ap.add_argument("-D", "--data", type=str, help="Which input data to use: own, ml-100k, demo", default="own")
-    ap.add_argument("-M", "--ctgan_model_name", type=str, help="Path to saving location of trained ctgan", default="test_model")
+    ap.add_argument("-M", "--ctgan_model_name", type=str, help="Path filename to saving location of trained ctgan", default="test_model")
     ap.add_argument("-I", "--input_file_name", type=str, help="Filename of own input data", default="mini_ml100k_user_10_item_25.csv")
     ap.add_argument("-C", "--comparison_file_name", type=str, help="Filename for csv output comparison data", default="test.csv")
     ap.add_argument("-P", "--partition_active_inactive", type=bool, help="Boolean, telling of the data should be partitioned in active/inactive users", default=False )
+    ap.add_argument("-BS", "--batch_size", type=int, help="batch size during training CTGAN", default=300)
     args = vars(ap.parse_args())
 
     nr_epochs = args['epochs']
+    batch_size = args['batch_size']
     input_data = args['data']
     model_name = args['ctgan_model_name']
     input_file_name = f"{conf.DATA_DIR}/{args['input_file_name']}"
@@ -137,4 +139,4 @@ if __name__ == "__main__":
 
     partition = args['partition_active_inactive']
 
-    main(nr_epochs, input_data, model_name, input_file_name, comparison_file_name, partition)
+    main(nr_epochs, input_data, model_name, input_file_name, comparison_file_name, partition, batch_size)
