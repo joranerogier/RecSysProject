@@ -8,7 +8,7 @@ import conf
 from  load_input_data_partition_active_vs_inactive import PartitionedInputDataLoader
 from load_synthetic_data_recombine_partition import CombinePartitionedSyntheticDataLoader
 
-model_file_name = "100eps_partitioned"
+model_file_name = "500eps_bs300_partitioned"
 datetime_now = '070421_0935'
 ctgan_dir = f"{conf.OUTPUT_DIR}CTGAN_models/"
 active_ctgan_model_path = f'{ctgan_dir}{model_file_name}_active.pkl'
@@ -16,7 +16,7 @@ inactive_ctgan_model_path = f'{ctgan_dir}{model_file_name}_inactive.pkl'
 
 # path to where to save new synthetic data
 syn_sparse_path_active = f'{conf.SYN_DATA_DIR}syn_sparse_{datetime_now}_active.csv'
-syn_sparse_path_inactive = f'{conf.SYN_DATA_DIR}syn_{datetime_now}_inactive.csv'
+syn_sparse_path_inactive = f'{conf.SYN_DATA_DIR}syn_sparse_{datetime_now}_inactive.csv'
 
 # Original training data (partitioned)
 orig_sparse_active = f"{conf.PARTITIONED_DATA_DIR}orig_sparse_{datetime_now}_active.csv"

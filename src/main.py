@@ -113,7 +113,7 @@ def main(epochs, input_data, model_file_name, input_file, comparison_file_name, 
     
     # Load the synthetic data (split in train & test set)
     #nr_samples = len(input_data)
-    #synthetic_data_loader = SyntheticDataLoader(datetime_now)
+    #synthetic_data_loader = SyntheticDataLoader(datetime_now, epochs, bs)
     #syn_train, syn_test = synthetic_data_loader.get_train_test_data()
 
     # Apply the recommender system algorithm to the original and new data
