@@ -7,7 +7,7 @@ This is the recommender class, which can use any of the following three algorith
 
 import warnings
 from sdv.tabular import CTGAN
-from lenskit.algorithms import Recommender, als, item_knn, user_knn
+from lenskit.algorithms import Recommender, als, item_knn, user_knn, tf
 from lenskit.metrics.predict import rmse
 from load_input_data import InputDataLoader
 from lenskit import batch, topn, util
@@ -64,5 +64,9 @@ class RecommenderSystem():
 
     def BPRMF(self):
         # Bayesian personalized ranking matrix factorization
+        algoname = "BPRMF"
+        bprmf = tf.BPR(50)# sensible default value
+
+
         pass
 

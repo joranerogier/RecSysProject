@@ -12,8 +12,11 @@ class SyntheticDataLoader():
     This class takes the synthetic sparse data created on a specific date, 
     transforms this into a dense representation (which is saved), and splits the data into train/test set.
     """
-    def __init__(self, c_date, bs, epochs):
-        self.data_sparse_path = f'{conf.SYN_DATA_DIR}syn_sparse_{c_date}.csv'
+    def __init__(self, c_date, bs, epochs, sparse_filename):
+        if c_date == "":
+            self.data_sparse_path = sparse_filename
+        else:
+            self.data_sparse_path = f'{conf.SYN_DATA_DIR}syn_sparse_{c_date}.csv'
         self.sparse_df = pd.read_csv(self.data_sparse_path, sep=',', encoding="latin-1").fillna("")
         
         # Transform the data to a dense representation
