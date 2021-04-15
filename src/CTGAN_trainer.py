@@ -18,12 +18,7 @@ from check_existence_dir_csv import check_dir, check_csv_path
 
 class TrainModel():
     def __init__(self, dn, ctgan_model_path, nr_epochs, curr_date, batch_size):
-        # Write training progress to csv file
-        '''check_dir(f'{conf.OUTPUT_DIR}/training_logs/')
-        self.out_file = f'{conf.OUTPUT_DIR}/training_logs/CTGAN_training_log.csv'
-        check_csv_path(self.out_file, ['date', 'dataset_name', 'epoch', 'score'])'''
         self.current_date = curr_date
-        
         self.ctgan_model_path = ctgan_model_path
         self.dataset_name = dn
 

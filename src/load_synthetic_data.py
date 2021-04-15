@@ -27,8 +27,6 @@ class SyntheticDataLoader():
         # Split the dataset
         self.train_data_rec, self.test_data_rec = self.create_save_train_test_rec_data(c_date, epochs, bs)
 
-
-
     def create_save_train_test_rec_data(self, current_date, epochs, bs):
         # For now, no cross-validation, just split the data into 1 train and 1 test set.
         for i, tp in enumerate(xf.partition_users(data=self.data_dense, partitions=1, method=xf.SampleN(5), rng_spec=1)):

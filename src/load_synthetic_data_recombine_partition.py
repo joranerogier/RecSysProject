@@ -2,7 +2,11 @@ from lenskit import crossfold as xf
 from sdv.tabular import CTGAN
 import pandas as pd
 import csv
+
+# Import own scripts
 import conf
+from sparse_to_dense import transform_sparse_to_dense_data
+from dense_to_sparse import transform_dense_to_sparse_data
 
 class CombinePartitionedSyntheticDataLoader():
     def __init__(self, c_date, syn_sparse_active, syn_sparse_inactive):
@@ -11,11 +15,8 @@ class CombinePartitionedSyntheticDataLoader():
         self.data_sparse_path_inactive = syn_sparse_inactive
 
         self.data_dense = self.transform_to_dense_combined_data()
-        self.data_sparse_combined = self.create_sparse_combined()
+        self.data_sparse_combined = transform_dense_to_sparse_data(self.data_dense)
         self.train_data_rec, self.test_data_rec = self.create_train_test_rec_data()
-
-        self.current_date = c_date
-
 
 
     def transform_to_dense_combined_data(self):
@@ -23,30 +24,14 @@ class CombinePartitionedSyntheticDataLoader():
         df_inactive = pd.read_csv(self.data_sparse_path_inactive, sep=',', encoding="latin-1").fillna("")
         transformed_data = []
 
-        nr_active_users = len(df_active)
-        print(f"Nr of active users: {nr_active_users}")
-
         # Add the active users 
-        for uid in range(len(df_active)):
-            for item_id in df_active.columns:
-                rating = df_active.iloc[uid][item_id]
-                #print(f"user: {uid} - item: {item_id} - rating: {rating}")
-                if rating != "":
-                    user_id = int(uid)+1
-                    sample = [user_id, int(item_id), int(rating)]
-                    transformed_data.append(sample)
+        active_dense = transform_sparse_to_dense_data(df_active)
+        transformed_data.append(active_dense)
 
         # Add the inactive users
-        # Add 'nr_active_users' + 1 to user id, to ensure that there are no duplicates.
-        for uid in range(len(df_inactive)):
-            for item_id in df_inactive.columns:
-                rating = df_inactive.iloc[uid][item_id]
-                #print(f"user: {uid} - item: {item_id} - rating: {rating}")
-                if rating != "":
-                    user_id = int(uid)+1+nr_active_users
-                    sample = [user_id, int(item_id), int(rating)]
-                    transformed_data.append(sample)
-                
+        inactive_dense = transform_sparse_to_dense_data(df_inactive)
+        transformed_data.append(inactive_dense)
+        
         df = pd.DataFrame(transformed_data, columns =['user', 'item', 'rating'])
         df.to_csv(f'{conf.SYN_DATA_DIR}syn_complete_{self.current_date}_combined_partition.csv')
         print(f"Combined df: \n {df}")
@@ -59,8 +44,7 @@ class CombinePartitionedSyntheticDataLoader():
             test = tp.test
             train.to_csv(f'{conf.SYN_DATA_DIR}syn_train_{self.current_date}.csv')
             test.to_csv(f'{conf.SYN_DATA_DIR}syn_test_{self.current_date}.csv')
-
-            return train, test
+        return train, test
 
     def create_sparse_combined(self):
         user_item_matrix = self.data_dense.pivot(*self.data_dense.columns)

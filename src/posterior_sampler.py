@@ -18,8 +18,6 @@ ctgan_model_path = f'{ctgan_dir}{model_file_name}.pkl'
 # path to where to save new synthetic data
 syn_sparse_path = f'{conf.SYN_DATA_DIR}syn_sparse_250eps_{sample_subset_ratio}.csv'
 
-
-
 # Original training data (sparse)
 data_loader = InputDataLoader(input_data, input_file)
 input_data = data_loader.get_sparse_data()

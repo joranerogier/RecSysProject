@@ -7,6 +7,7 @@ import numpy as np
 
 # import own scripts
 import conf
+from dense_to_sparse import transform_to_sparse_data
 
 class PartitionedInputDataLoader():
     def __init__(self, input_data="", input_path=""):
@@ -61,24 +62,12 @@ class PartitionedInputDataLoader():
         print(f"Active users df: \n {df_active}")
         return df_active, df_inactive
 
-
-    def transform_to_sparse_data(self, r):
-        """
-        Transform the [user, item, rating]-df into a user-item matrix.
-        """
-        user_item_matrix = r.pivot(*r.columns)
-        user_item_matrix = user_item_matrix.fillna("")
-        user_item_matrix.columns = user_item_matrix.columns.astype(str)
-        print(user_item_matrix.head())
-        return user_item_matrix
-
     def load_data(self):
         dense_data = self.load_dense_data()
         active_df_dense, inactive_df_dense = self.partition_users(dense_data)
-        active_df_sparse = self.transform_to_sparse_data(active_df_dense)
-        inactive_df_sparse = self.transform_to_sparse_data(inactive_df_dense)
+        active_df_sparse = transform_to_sparse_data(active_df_dense)
+        inactive_df_sparse = transform_to_sparse_data(inactive_df_dense)
         return active_df_dense, inactive_df_dense, active_df_sparse, inactive_df_sparse
-
 
     def get_sparse_data(self):
         return self.active_data_sparse, self.inactive_data_sparse

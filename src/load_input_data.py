@@ -6,6 +6,7 @@ from lenskit import crossfold as xf
 
 # import own scripts
 import conf
+from dense_to_sparse import transform_dense_to_sparse_data
 
 class InputDataLoader():
     def __init__(self, input_data="", input_path=""):
@@ -28,10 +29,7 @@ class InputDataLoader():
             ratings = ml100k.ratings
             ratings = ratings[['user', 'item', 'rating']]
 
-        user_item_matrix = ratings.pivot(*ratings.columns)
-        user_item_matrix = user_item_matrix.fillna("")
-        user_item_matrix.columns = user_item_matrix.columns.astype(str)
-        print(user_item_matrix.head())
+        user_item_matrix = transform_dense_to_sparse_data(ratings)
         return user_item_matrix    
    
     def get_sparse_data(self):

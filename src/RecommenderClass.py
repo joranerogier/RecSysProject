@@ -66,7 +66,7 @@ class RecommenderSystem():
         # Bayesian personalized ranking matrix factorization
         algoname = "BPRMF"
         bprmf = tf.BPR(50)# sensible default value
-
+        
 
         pass
 
