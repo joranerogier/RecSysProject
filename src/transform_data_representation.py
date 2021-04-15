@@ -16,6 +16,12 @@ def transform_sparse_to_dense_data(sparse_df):
     df = pd.DataFrame(transformed_data, columns =['user', 'item', 'rating'])
     return df
 
+def transform_dense_to_sparse_data(ratings):
+    user_item_matrix = ratings.pivot(*ratings.columns)
+    user_item_matrix = user_item_matrix.fillna("")
+    user_item_matrix.columns = user_item_matrix.columns.astype(str)
+    return user_item_matrix 
+
 def dense_to_csv(df, cd, epochs, bs):
     df.to_csv(f'{conf.SYN_DATA_DIR}syn_dense_{cd}_{epochs}eps_{bs}bs.csv')
 

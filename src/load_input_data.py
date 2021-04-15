@@ -6,7 +6,7 @@ from lenskit import crossfold as xf
 
 # import own scripts
 import conf
-from dense_to_sparse import transform_dense_to_sparse_data
+from transform_data_representation import transform_dense_to_sparse_data
 
 class InputDataLoader():
     def __init__(self, input_data="", input_path=""):

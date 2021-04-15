@@ -6,10 +6,10 @@ from lenskit import crossfold as xf
 # Import own packages
 from RecommenderClass import RecommenderSystem
 import conf 
-from sparse_to_dense import transform_sparse_to_dense_data
+from transform_data_representation import transform_sparse_to_dense_data, transform_dense_to_sparse_data
 from compare_original_synthetic_data import DataComparison
 from load_synthetic_data_recombine_partition import CombinePartitionedSyntheticDataLoader
-from dense_to_sparse import transform_dense_to_sparse_data
+
 
 def create_save_train_test_rec_data(dense_data, fn):
     # For now, no cross-validation, just split the data into 1 train and 1 test set.

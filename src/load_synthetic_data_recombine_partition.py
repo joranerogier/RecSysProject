@@ -5,8 +5,7 @@ import csv
 
 # Import own scripts
 import conf
-from sparse_to_dense import transform_sparse_to_dense_data
-from dense_to_sparse import transform_dense_to_sparse_data
+from transform_data_representation import transform_sparse_to_dense_data,  transform_dense_to_sparse_data
 
 class CombinePartitionedSyntheticDataLoader():
     def __init__(self, c_date, syn_sparse_active, syn_sparse_inactive):

@@ -5,7 +5,7 @@ import csv
 
 #import own scripts
 import conf
-from sparse_to_dense import transform_sparse_to_dense_data, dense_to_csv
+from transform_data_representation import transform_sparse_to_dense_data, dense_to_csv
 
 class SyntheticDataLoader():
     """
