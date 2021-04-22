@@ -3,3 +3,4 @@ __pycache__
 data/*
 output/*
 src/ml-100k/*
+!output/imgs/*

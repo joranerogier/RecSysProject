@@ -59,7 +59,9 @@ if __name__ == "__main__":
     ap.add_argument("-O", "--output", type=str, help="added string to train/test output csv files", default="test")
     args = vars(ap.parse_args())
 
-    input_path = f"{conf.SYN_DATA_DIR}{args['data']}.csv"
+    # test on own created "true" subset data from ml-100k
+    input_path = pd.read_csv(input_path, sep=',', encoding="latin-1").fillna("")
+    #input_path = f"{conf.SYN_DATA_DIR}{args['data']}.csv"
     input_data = pd.read_csv(input_path, sep=',', encoding="latin-1").fillna("")
 
     recsys_algo = args['algo']
