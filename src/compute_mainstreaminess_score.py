@@ -60,11 +60,11 @@ for uid in range(len(df)):
 #print(user_mainstreamnesses)
 #print(taus)
 
-#  Plot taus to investigate the values
+'''#  Plot taus to investigate the values
 SRC_DIR = os.path.dirname(os.path.abspath(__file__))
 ROOT_DIR = os.path.dirname(SRC_DIR)
 
 plt.hist(taus)
 plt.xlabel("Kendall's tau")
 plt.ylabel("Counts")
-plt.savefig(f'{ROOT_DIR}/output/imgs/taus_histogram_100ratings.png')
+plt.savefig(f'{ROOT_DIR}/output/imgs/taus_histogram_100ratings.png')'''
