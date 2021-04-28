@@ -59,7 +59,8 @@ class TrainModel():
 
             model = CTGAN(
                 epochs=self.epochs, 
-                batch_size=self.batch_size
+                batch_size=self.batch_size,
+                verbose=True
             )
             model.fit(data_train)
 
