@@ -8,7 +8,7 @@ def transform_sparse_to_dense_data(sparse_df):
         for item_id in sparse_df.columns:
             rating = sparse_df.iloc[uid][item_id]
             #print(f"user: {uid} - item: {item_id} - rating: {rating}")
-            if rating != "":
+            if rating != 0:
                 user_id = int(uid)+1
                 sample = [user_id, int(item_id), int(rating)]
                 transformed_data.append(sample)
