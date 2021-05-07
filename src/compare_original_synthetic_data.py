@@ -18,7 +18,7 @@ class DataComparison():
 
     def get_nr_non_empty_cells(self, df):
         # Returns the number of non-empty cells in the given dataset.
-        df['nr_empty'] = df.iloc[:, 1:].eq("").sum(axis=1)
+        df['nr_empty'] = df.iloc[:, 1:].eq(0).sum(axis=1)
         nr_non_empty = df['nr_empty'].sum()
         print(f"Nr of non-empty cells: {nr_non_empty}")
         return nr_non_empty

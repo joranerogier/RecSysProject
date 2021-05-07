@@ -7,7 +7,7 @@ import numpy as np
 
 # import own scripts
 import conf
-from transform_data_representation import transform_to_sparse_data
+from transform_data_representation import transform_dense_to_sparse_data
 
 class PartitionedInputDataLoader():
     def __init__(self, input_data="", input_path=""):

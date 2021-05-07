@@ -38,11 +38,13 @@ def main(epochs, input_data, model_file_name, input_file, comparison_file_name, 
     check_csv_path(logging_file, ['date', 'epoch_date', 'dataset_name', 'nr_epochs', 'batch_size', 'generator_lr', 'generator_decay', 'discriminator_lr', 'discriminator_decay', 'evaluation', 'fitting time (s)', 'nr_users_orig', 'nr_user_syn', 'nr_items_orig', 'nr_items_syn', 'sparseness_orig', 'sparseness_syn'])
     datetime_now = datetime.datetime.now().strftime('%d%m%y_%H%M')
     
+    
     # Set path for sparse active & inactive partition csv
     orig_sparse_path_active = f'{conf.PARTITIONED_DATA_DIR}orig_sparse_{datetime_now}_active.csv'
     orig_sparse_path_inactive = f'{conf.PARTITIONED_DATA_DIR}orig_sparse_{datetime_now}_inactive.csv'
     syn_sparse_path_active = f'{conf.SYN_DATA_DIR}syn_sparse_{datetime_now}_active.csv'
     syn_sparse_path_inactive = f'{conf.SYN_DATA_DIR}syn_{datetime_now}_inactive.csv'
+    
 
     if (p==False):
         # For non-partitioned data
@@ -60,7 +62,6 @@ def main(epochs, input_data, model_file_name, input_file, comparison_file_name, 
         df_comparison = DataComparison(input_data, new_data)
         comp = df_comparison.get_comparison_df()
         print(comp)
-
     else:
         # complete input data
         data_loader_c = InputDataLoader(input_data, input_file)
