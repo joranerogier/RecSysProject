@@ -24,6 +24,8 @@ class InputDataLoader():
     def load_sparse_data(self):
         if(self.input_data == "own"):
             user_item_matrix = pd.read_csv(self.input_path, sep=',', encoding="latin-1")
+            user_item_matrix = user_item_matrix.set_index('user')
+            print(user_item_matrix)
             #user_item_matrix = transform_dense_to_sparse_data(ratings)
         else:
             ml100k = ML100K('ml-100k')
