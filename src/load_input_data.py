@@ -23,8 +23,11 @@ class InputDataLoader():
 
     def load_sparse_data(self):
         if(self.input_data == "own"):
-            user_item_matrix = pd.read_csv(self.input_path, sep=',', encoding="latin-1")
-            user_item_matrix = user_item_matrix.set_index('user')
+            user_item_matrix = pd.read_csv(self.input_path, sep=';', encoding="latin-1")
+            user_item_matrix[user_item_matrix.columns].astype(str)
+            #user_item_matrix = user_item_matrix.set_index('user')
+            print(user_item_matrix)
+            user_item_matrix = user_item_matrix.replace(0,"")
             print(user_item_matrix)
             #user_item_matrix = transform_dense_to_sparse_data(ratings)
         else:
@@ -32,6 +35,8 @@ class InputDataLoader():
             ratings = ml100k.ratings
             ratings = ratings[['user', 'item', 'rating']]
             user_item_matrix = transform_dense_to_sparse_data(ratings)
+            #user_item_matrix[user_item_matrix.columns].astype(str)
+            print(f"ui-matrix: {user_item_matrix}")
         return user_item_matrix    
    
     def get_sparse_data(self):

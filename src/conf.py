@@ -9,8 +9,10 @@ check_dir(OUTPUT_DIR)
 
 DATA_DIR = f'{ROOT_DIR}/data/'
 
-SYN_DATA_DIR = f'{OUTPUT_DIR}/synthetic_data/'
+SYN_DATA_DIR = f'{OUTPUT_DIR}synthetic_data/'
 check_dir(SYN_DATA_DIR)
 
-PARTITIONED_DATA_DIR = f'{OUTPUT_DIR}/partitioned_data/'
+PARTITIONED_DATA_DIR = f'{OUTPUT_DIR}partitioned_data/'
+PARTITIONED_MAINSTREAM_DATA_DIR = f'{OUTPUT_DIR}partitioned_mainstreaminess_data/'
+
 check_dir(PARTITIONED_DATA_DIR)

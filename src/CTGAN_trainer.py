@@ -76,11 +76,11 @@ class TrainModel():
 
             # check if active/inactive user partition is used, to save the file accordingly
             if (user_part == ""):
-                self.new_data.fillna("").to_csv(f"{conf.SYN_DATA_DIR}syn_sparse_{self.current_date}.csv", index=False)
+                self.new_data.fillna(0).to_csv(f"{conf.SYN_DATA_DIR}syn_sparse_{self.current_date}.csv", index=False)
             elif (user_part == "active"):
-                self.new_data.fillna("").to_csv(f"{conf.SYN_DATA_DIR}syn_sparse_{self.current_date}_active.csv", index=False)
+                self.new_data.fillna(0).to_csv(f"{conf.SYN_DATA_DIR}syn_sparse_{self.current_date}_active.csv", index=False)
             elif (user_part == "inactive"):
-                self.new_data.fillna("").to_csv(f"{conf.SYN_DATA_DIR}syn_sparse_{self.current_date}_inactive.csv", index=False)
+                self.new_data.fillna(0).to_csv(f"{conf.SYN_DATA_DIR}syn_sparse_{self.current_date}_inactive.csv", index=False)
             else:
                 print("[WARNING] Synthetic data is not saved to file.")
             #self.eval = self.eval_model(data_train, self.new_data)

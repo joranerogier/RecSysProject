@@ -60,9 +60,9 @@ if __name__ == "__main__":
     args = vars(ap.parse_args())
 
     # test on own created "true" subset data from ml-100k
-    input_path = pd.read_csv(input_path, sep=',', encoding="latin-1").fillna("")
+    input_path = pd.read_csv(input_path, sep=',', encoding="latin-1").fillna(0)
     #input_path = f"{conf.SYN_DATA_DIR}{args['data']}.csv"
-    input_data = pd.read_csv(input_path, sep=',', encoding="latin-1").fillna("")
+    input_data = pd.read_csv(input_path, sep=',', encoding="latin-1").fillna(0)
 
     recsys_algo = args['algo']
     

@@ -70,8 +70,8 @@ def main(epochs, input_data, model_file_name, input_file, comparison_file_name, 
         # partitioned input data & Save to csv file
         data_loader = PartitionedInputDataLoader(input_data, input_file)
         input_data_active, input_data_inactive = data_loader.get_sparse_data()
-        input_data_active.fillna("").to_csv(f"{orig_sparse_path_active}", index=False)
-        input_data_inactive.fillna("").to_csv(f"{orig_sparse_path_inactive}", index=False)
+        input_data_active.fillna(0).to_csv(f"{orig_sparse_path_active}", index=False)
+        input_data_inactive.fillna(0).to_csv(f"{orig_sparse_path_inactive}", index=False)
 
         active_ctgan_model_path = f'{ctgan_dir}{model_file_name}_active.pkl'
         inactive_ctgan_model_path = f'{ctgan_dir}{model_file_name}_inactive.pkl'
@@ -81,13 +81,13 @@ def main(epochs, input_data, model_file_name, input_file, comparison_file_name, 
         m_active.build_model(data_train=input_data_active, user_part="active")
         new_data_active = m_active.get_new_data()
         print(f"NEW DATA HERE: {new_data_active}")
-        new_data_active.fillna("").to_csv(f"{syn_sparse_path_active}", index=False)
+        new_data_active.fillna(0).to_csv(f"{syn_sparse_path_active}", index=False)
         
         # CTGAN model for inactive users
         m_inactive = TrainModel(dn="test eval", ctgan_model_path=inactive_ctgan_model_path, nr_epochs=epochs, curr_date=datetime_now, batch_size=bs)
         m_inactive.build_model(data_train=input_data_inactive, user_part="inactive")
         new_data_inactive = m_inactive.get_new_data()
-        new_data_inactive.fillna("").to_csv(f"{syn_sparse_path_inactive}", index=False)
+        new_data_inactive.fillna(0).to_csv(f"{syn_sparse_path_inactive}", index=False)
 
         # Recombine active and inactive users datasets
         # check if there are no duplicate users in the two subsets

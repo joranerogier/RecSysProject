@@ -20,7 +20,7 @@ def transform_dense_to_sparse_data(ratings):
     user_item_matrix = ratings.pivot(*ratings.columns)
     user_item_matrix = user_item_matrix.fillna(0)
     user_item_matrix.columns = user_item_matrix.columns.astype(str)
-    return user_item_matrix 
+    return user_item_matrix
 
 def dense_to_csv(df, cd, epochs, bs):
     df.to_csv(f'{conf.SYN_DATA_DIR}syn_dense_{cd}_{epochs}eps_{bs}bs.csv')

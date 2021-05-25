@@ -21,8 +21,8 @@ syn_sparse_path_inactive = f'{conf.SYN_DATA_DIR}syn_sparse_{datetime_now}_inacti
 # Original training data (partitioned)
 orig_sparse_active = f"{conf.PARTITIONED_DATA_DIR}orig_sparse_{datetime_now}_active.csv"
 orig_sparse_inactive = f"{conf.PARTITIONED_DATA_DIR}orig_sparse_{datetime_now}_inactive.csv"
-df_orig_active = pd.read_csv(orig_sparse_active, sep=',', encoding="latin-1").fillna("")
-df_orig_inactive = pd.read_csv(orig_sparse_inactive, sep=',', encoding="latin-1").fillna("")
+df_orig_active = pd.read_csv(orig_sparse_active, sep=',', encoding="latin-1").fillna(0)
+df_orig_inactive = pd.read_csv(orig_sparse_inactive, sep=',', encoding="latin-1").fillna(0)
 
 # Set seed to ensure reproducibility
 torch.manual_seed(0)
@@ -36,8 +36,8 @@ inactive_model = CTGAN.load(inactive_ctgan_model_path)
 new_data_active = active_model.sample(len(df_orig_active))
 new_data_inactive = inactive_model.sample(len(df_orig_inactive))
 print(f"NEW ACTIVE DATA HERE: {new_data_active}")
-new_data_active.fillna("").to_csv(f"{syn_sparse_path_active}", index=False)
-new_data_inactive.fillna("").to_csv(f"{syn_sparse_path_inactive}", index=False)
+new_data_active.fillna(0).to_csv(f"{syn_sparse_path_active}", index=False)
+new_data_inactive.fillna(0).to_csv(f"{syn_sparse_path_inactive}", index=False)
 print(f"NEW INACTIVE DATA HERE: {new_data_inactive}")
 
 # Combine active/inactive partition

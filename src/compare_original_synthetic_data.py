@@ -7,6 +7,11 @@ import csv
 from check_existence_dir_csv import check_csv_path
 import datetime
 
+import conf
+from lenskit.datasets import ML100K
+from transform_data_representation import transform_dense_to_sparse_data
+
+
 class DataComparison():
     def __init__(self, orig, syn):
         self.sparseness_orig = self.calculate_sparseness(orig)
@@ -47,6 +52,15 @@ class DataComparison():
         df = pd.DataFrame(data, columns = ['Characteristic', 'Orig', 'Syn'])
         return df
 
-        
-        
 
+syn_sparse = f'{conf.SYN_DATA_DIR}syn_sparse_combined_tau_0.165_750eps_300bs_str3.csv'
+s = pd.read_csv(syn_sparse, sep=',', encoding="latin-1").fillna(0)
+
+ml100k = ML100K('ml-100k')
+ratings = ml100k.ratings
+ratings = ratings[['user', 'item', 'rating']]
+o = transform_dense_to_sparse_data(ratings)
+
+data_comp = DataComparison(o, s)
+comp = data_comp.get_comparison_df()
+print(comp)

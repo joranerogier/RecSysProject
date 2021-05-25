@@ -39,7 +39,7 @@ class MainstreaminessPartitionedInputDataLoader():
 
 
 input_bm = f'{conf.OUTPUT_DIR}partitioned_mainstreaminess_data/orig_dense_beyond_mainstream_tau_0.165.csv'
-input_m = f'{conf.OUTPUT_DIR}partitioned_mainstreaminess_data/orig_dense_mainstream_tau_0.165.csv'
+input_m = f'{conf.OUTPUT_DIR}partitioned_mainstreaminess_data/orig_dense_all_tau_0.165.csv'
 
 output_bm = f'{conf.OUTPUT_DIR}partitioned_mainstreaminess_data/orig_sparse_beyond_mainstream_tau_0.165.csv'
 output_all = f'{conf.OUTPUT_DIR}partitioned_mainstreaminess_data/orig_sparse_all_tau_0.165.csv'

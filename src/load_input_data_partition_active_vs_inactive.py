@@ -65,8 +65,8 @@ class PartitionedInputDataLoader():
     def load_data(self):
         dense_data = self.load_dense_data()
         active_df_dense, inactive_df_dense = self.partition_users(dense_data)
-        active_df_sparse = transform_to_sparse_data(active_df_dense)
-        inactive_df_sparse = transform_to_sparse_data(inactive_df_dense)
+        active_df_sparse = transform_dense_to_sparse_data(active_df_dense)
+        inactive_df_sparse = transform_dense_to_sparse_data(inactive_df_dense)
         return active_df_dense, inactive_df_dense, active_df_sparse, inactive_df_sparse
 
     def get_sparse_data(self):
