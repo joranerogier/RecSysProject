@@ -22,14 +22,11 @@ def write_to_csv(file_path, values):
     f.close()
 
 
-def main(epochs, input_data, model_file_name, input_file, comparison_file_name, p, bs, lc):
+def main(epochs, input_data, model_file_name, input_file, comparison_file_name, p, bs):
     # Check and set directories/paths for the CTGAN models
     
-    # Set directory to save CTGAN to /scratch directory, due to memory errors on own home directory
-    if lc == 'cluster':
-        ctgan_dir = f"/scratch/jrogier/"
-    else: 
-        ctgan_dir = f"{conf.OUTPUT_DIR}CTGAN_models/"
+    # Set directory to save CTGAN
+    ctgan_dir = f"{conf.OUTPUT_DIR}CTGAN_models/"
     check_dir(ctgan_dir)
 
     # Check and set directories/paths for the training & comparison results
@@ -57,6 +54,7 @@ def main(epochs, input_data, model_file_name, input_file, comparison_file_name, 
         m.build_model(data_train=input_data)
 
         new_data = m.get_new_data()
+        print(new_data)
 
         # Get and print comparison dataframe
         df_comparison = DataComparison(input_data, new_data)
@@ -133,7 +131,6 @@ if __name__ == "__main__":
     ap.add_argument("-C", "--comparison_file_name", type=str, help="Filename for csv output comparison data", default="test.csv")
     ap.add_argument("-P", "--partition_active_inactive", type=bool, help="Boolean, telling of the data should be partitioned in active/inactive users", default=False )
     ap.add_argument("-BS", "--batch_size", type=int, help="batch size during training CTGAN", default=500)
-    ap.add_argument("-LC", "--local_or_cluster", type=str, help="(remote)machine where the scripts are run", default='local')   
     args = vars(ap.parse_args())
 
     nr_epochs = args['epochs']
@@ -143,7 +140,6 @@ if __name__ == "__main__":
     input_file_name = f"{conf.DATA_DIR}/{args['input_file_name']}"
 
     comparison_file_name = args['comparison_file_name']
-    local_or_cluster = args['local_or_cluster']
     partition = args['partition_active_inactive']
 
-    main(nr_epochs, input_data, model_name, input_file_name, comparison_file_name, partition, batch_size, local_or_cluster)
+    main(nr_epochs, input_data, model_name, input_file_name, comparison_file_name, partition, batch_size)

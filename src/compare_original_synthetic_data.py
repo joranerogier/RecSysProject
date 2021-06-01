@@ -53,7 +53,7 @@ class DataComparison():
         return df
 
 
-syn_sparse = f'{conf.SYN_DATA_DIR}syn_sparse_combined_tau_0.165_750eps_300bs_str3.csv'
+'''syn_sparse = f'{conf.SYN_DATA_DIR}syn_sparse_combined_tau_0.165_750eps_300bs_str3.csv'
 s = pd.read_csv(syn_sparse, sep=',', encoding="latin-1").fillna(0)
 
 ml100k = ML100K('ml-100k')
@@ -63,4 +63,4 @@ o = transform_dense_to_sparse_data(ratings)
 
 data_comp = DataComparison(o, s)
 comp = data_comp.get_comparison_df()
-print(comp)
+print(comp)'''

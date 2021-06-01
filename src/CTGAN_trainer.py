@@ -60,7 +60,9 @@ class TrainModel():
             model = CTGAN(
                 epochs=self.epochs, 
                 batch_size=self.batch_size,
-                verbose=True
+                verbose=True,
+                log_frequency= True,
+                field_transformers = {'one_hot_encoding': "OneHotEncodingTransformer"}
             )
             model.fit(data_train)
 
