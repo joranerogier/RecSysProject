@@ -7,11 +7,12 @@ This is the recommender class, which can use any of the following three algorith
 
 import warnings
 from sdv.tabular import CTGAN
-from lenskit.algorithms import Recommender, als, item_knn, user_knn, tf
+from lenskit.algorithms import Recommender, als, item_knn, user_knn#, tf
+from lenskit.algorithms import tf as ltf
 from lenskit.metrics.predict import rmse
 from load_input_data import InputDataLoader
 from lenskit import batch, topn, util
-
+import tensorflow as tf
 
 # import own scripts
 import conf
@@ -22,13 +23,11 @@ class RecommenderSystem():
         self.num_recs = 10
         self.max_nbrs = 15 # "reasonable default"
         self.min_nbrs = 3 # "reasonable default"
-
         """
         For the moment, no cross validation is used.
         Thus, the train & test data are just set globally.
         """
         self.train, self.test = train_data, test_data
-
 
     def eval(self, aname, algo):
         fittable = util.clone(algo)
@@ -50,7 +49,7 @@ class RecommenderSystem():
         algoname = "itemKNN"
         item_item = item_knn.ItemItem(self.max_nbrs, self.min_nbrs)
         eval = self.eval(algoname, item_item)
-        print("UserKNN was fitted.")
+        print("ItemKNN was fitted.")
         print(eval)
         return eval
 
@@ -65,8 +64,8 @@ class RecommenderSystem():
     def BPRMF(self):
         # Bayesian personalized ranking matrix factorization
         algoname = "BPRMF"
-        bprmf = tf.BPR(50)# sensible default value
-        
-
-        pass
-
+        bprmf = ltf.BPR(50)# sensible default value
+        eval = self.eval(algoname, bprmf)
+        print("BPRMF was fitted.")
+        print(eval)
+        return eval

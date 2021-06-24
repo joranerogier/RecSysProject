@@ -55,7 +55,9 @@ class TrainModel():
 
             # Set seed to ensure reproducibility
             torch.manual_seed(0)
+            #torch.device("cpu")
             np.random.seed(0)
+            
 
             model = CTGAN(
                 epochs=self.epochs, 
@@ -64,6 +66,8 @@ class TrainModel():
                 log_frequency= True,
                 field_transformers = {'one_hot_encoding': "OneHotEncodingTransformer"}
             )
+
+            data_train= data_train.astype(str)
             model.fit(data_train)
 
             print("CTGAN model was fitted to input data.")

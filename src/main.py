@@ -45,7 +45,7 @@ def main(epochs, input_data, model_file_name, input_file, comparison_file_name, 
 
     if (p==False):
         # For non-partitioned data
-        data_loader = InputDataLoader(input_data, input_file)
+        data_loader = InputDataLoader(',', input_data, input_file)
         input_data = data_loader.get_sparse_data()
 
         # Build and fit the CTGAN model to the input data
@@ -99,33 +99,14 @@ def main(epochs, input_data, model_file_name, input_file, comparison_file_name, 
         df_comparison = DataComparison(input_data_c, combined_sparse)
         comp = df_comparison.get_comparison_df()
         print(comp)
-        
 
     return
 
-    
-    '''# Log training and comparison results
-    training_values = m.get_params_csv()
-    comparison_values = df_comparison.get_values_csv()
-    all_values = training_values + comparison_values
-    write_to_csv(logging_file, all_values)'''
-    
-    # Load the synthetic data (split in train & test set)
-    #nr_samples = len(input_data)
-    #synthetic_data_loader = SyntheticDataLoader(datetime_now, epochs, bs, "")
-    #syn_train, syn_test = synthetic_data_loader.get_train_test_data()
-
-    # Apply the recommender system algorithm to the original and new data
-    #recsys = RecommenderSystem(syn_train, syn_test)
-    #eval_itemKNN =  recsys.itemKNN()
-    #print(f"Evaluation itemKNN: {eval_itemKNN}")    
-    #eval_userKNN = recsys.userKNN()
-    #print(f"Evaluation userKNN: {eval_userKNN}")
 
 if __name__ == "__main__":
     ap = argparse.ArgumentParser()
     ap.add_argument("-E", "--epochs", type=int, help="Nr. of epochs for training the CTGAN model", default=1)
-    ap.add_argument("-D", "--data", type=str, help="Which input data to use: own, ml-100k, demo", default="own")
+    ap.add_argument("-D", "--data", type=str, help="Which input data to use: amazon, own, ml-100k, demo", default="own")
     ap.add_argument("-M", "--ctgan_model_name", type=str, help="Path filename to saving location of trained ctgan", default="test_model")
     ap.add_argument("-I", "--input_file_name", type=str, help="Filename of own input data", default="mini_ml100k_user_10_item_25.csv")
     ap.add_argument("-C", "--comparison_file_name", type=str, help="Filename for csv output comparison data", default="test.csv")

@@ -10,8 +10,8 @@ from load_synthetic_data_recombine_partition import CombinePartitionedSyntheticD
 
 prefixes = ['all', 'beyond', 'combined']
 
-model_file_name = "_tau_0.165_750eps_300bs_str3"
-datetime_now = '250521_1007'
+model_file_name = "_tau_0.07_l20_1000eps_300bs"
+datetime_now = '140621_1007'
 ctgan_dir = f"{conf.OUTPUT_DIR}CTGAN_models/"
 all_ctgan_model_path = f'{ctgan_dir}{prefixes[0]}{model_file_name}.pkl'
 beyond_mainstream_ctgan_model_path = f'{ctgan_dir}{prefixes[1]}{model_file_name}.pkl'
@@ -23,8 +23,8 @@ syn_sparse_path_combined = f'{conf.SYN_DATA_DIR}syn_sparse_{prefixes[2]}{model_f
 syn_dense_path_combined = f'{conf.SYN_DATA_DIR}syn_dense_{prefixes[2]}{model_file_name}.csv'
 
 # Original training data (partitioned)
-orig_sparse_all = f"{conf.PARTITIONED_MAINSTREAM_DATA_DIR}orig_sparse_all_tau_0.165_usercolumnremoved.csv"
-orig_sparse_beyond_mainstream = f"{conf.PARTITIONED_MAINSTREAM_DATA_DIR}orig_sparse_beyond_mainstream_tau_0.165_usercolumnremoved.csv"
+orig_sparse_all = f"{conf.PARTITIONED_MAINSTREAM_DATA_DIR}orig_sparse_all_tau_tau_0.07_l20.csv"
+orig_sparse_beyond_mainstream = f"{conf.PARTITIONED_MAINSTREAM_DATA_DIR}orig_sparse_beyond_tau_tau_0.07_l20.csv"
 df_orig_all = pd.read_csv(orig_sparse_all, sep=',', encoding="latin-1").fillna(0)
 df_orig_beyond = pd.read_csv(orig_sparse_beyond_mainstream, sep=',', encoding="latin-1").fillna(0)
 
