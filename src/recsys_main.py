@@ -25,7 +25,7 @@ def create_save_train_test_rec_data(dense_data, fn):
     test_sparse = transform_dense_to_sparse_data(test)
     train_sparse.to_csv(f'{conf.SYN_DATA_DIR}syn_train_sparse_{fn}.csv')
     test_sparse.to_csv(f'{conf.SYN_DATA_DIR}syn_test_sparse_{fn}.csv')
-    return train_sparse, test_sparse
+    return train, test
 
 
 def main(input_data, a, o, to_split):
@@ -43,18 +43,31 @@ def main(input_data, a, o, to_split):
         syn_test = pd.read_csv(syn_test_path, sep=',', encoding="latin-1").fillna(0)
         syn_train = syn_train[['user', 'item', 'rating']]
         syn_test = syn_test[['user', 'item', 'rating']]
+        syn_train_path_sparse = f"{conf.SYN_DATA_DIR}syn_train_sparse_{input_data}.csv" 
+        syn_test_path_sparse = f"{conf.SYN_DATA_DIR}syn_test_sparse_{input_data}.csv"
+        syn_train_sparse = pd.read_csv(syn_train_path, sep=',', encoding="latin-1").fillna(0)
+        syn_test_sparse = pd.read_csv(syn_test_path, sep=',', encoding="latin-1").fillna(0)
+        syn_train_sparse = syn_train[['user', 'item', 'rating']]
+        syn_test_sparse = syn_test[['user', 'item', 'rating']]
 
     
     # Apply the recommender system algorithm to the original and new data
-    recsys = RecommenderSystem(syn_train, syn_test)
-    print(syn_train)
+    
     if (a == "itemKNN"):
+        import tensorflow as tf
+        recsys = RecommenderSystem(syn_train, syn_test)
+        print(syn_train)
         recs =  recsys.itemKNN()
         print(f"Evaluation itemKNN: {recs}")
     elif (a == "userKNN"):
+        recsys = RecommenderSystem(syn_train, syn_test)
+        print(syn_train)
+        import tensorflow as tf
         recs = recsys.userKNN()
         print(f"Evaluation userKNN: {recs}")
     elif (a == "BPRMF"):
+        recsys = RecommenderSystem(syn_train_sparse, syn_test_sparse)
+        print(syn_train_sparse)
         recs =  recsys.BPRMF()
         print("BPRMF not yet implemented")
     else:
@@ -68,7 +81,7 @@ def main(input_data, a, o, to_split):
 if __name__ == "__main__":
     ap = argparse.ArgumentParser()
     ap.add_argument("-D", "--data", type=str, help="Which sparse input data to use for the recommendation")
-    ap.add_argument("-S", "--split", type=str, help="If input data needs to be split or not", default=True)
+    ap.add_argument("-S", "--split", type=str, help="If input data needs to be split or not", default="True")
     ap.add_argument("-A", "--algo", type=str, help="Which recommender system algorithm to use")
     ap.add_argument("-O", "--output", type=str, help="added string to train/test output csv files", default="test")
     args = vars(ap.parse_args())

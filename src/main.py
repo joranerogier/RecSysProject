@@ -22,7 +22,7 @@ def write_to_csv(file_path, values):
     f.close()
 
 
-def main(epochs, input_data, model_file_name, input_file, comparison_file_name, p, bs):
+def main(epochs, input_data, model_file_name, input_file, comparison_file_name, p, bs, s):
     # Check and set directories/paths for the CTGAN models
     
     # Set directory to save CTGAN
@@ -45,7 +45,7 @@ def main(epochs, input_data, model_file_name, input_file, comparison_file_name, 
 
     if (p==False):
         # For non-partitioned data
-        data_loader = InputDataLoader(',', input_data, input_file)
+        data_loader = InputDataLoader(s, input_data, input_file)
         input_data = data_loader.get_sparse_data()
 
         # Build and fit the CTGAN model to the input data
@@ -112,6 +112,7 @@ if __name__ == "__main__":
     ap.add_argument("-C", "--comparison_file_name", type=str, help="Filename for csv output comparison data", default="test.csv")
     ap.add_argument("-P", "--partition_active_inactive", type=bool, help="Boolean, telling of the data should be partitioned in active/inactive users", default=False )
     ap.add_argument("-BS", "--batch_size", type=int, help="batch size during training CTGAN", default=500)
+    ap.add_argument("-S", "--separation_char", type=str, help="separation char for reading csv files", default=';')
     args = vars(ap.parse_args())
 
     nr_epochs = args['epochs']
@@ -119,8 +120,9 @@ if __name__ == "__main__":
     input_data = args['data']
     model_name = args['ctgan_model_name']
     input_file_name = f"{conf.DATA_DIR}/{args['input_file_name']}"
+    sep_char = args['separation_char']
 
     comparison_file_name = args['comparison_file_name']
     partition = args['partition_active_inactive']
 
-    main(nr_epochs, input_data, model_name, input_file_name, comparison_file_name, partition, batch_size)
+    main(nr_epochs, input_data, model_name, input_file_name, comparison_file_name, partition, batch_size, sep_char)
