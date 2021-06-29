@@ -2,7 +2,6 @@ import pandas as pd
 from sdv.demo import load_tabular_demo
 from timer import Timer
 from lenskit.datasets import ML100K
-from lenskit import crossfold as xf
 
 # import own scripts
 import conf

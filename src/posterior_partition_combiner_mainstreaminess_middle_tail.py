@@ -9,11 +9,11 @@ import conf
 from load_synthetic_data_recombine_partition import CombinePartitionedSyntheticDataLoader
 from transform_data_representation import transform_sparse_to_dense_data
 
-prefixes = ['all', 'beyond', 'combined_middle_tail', 'all_middle_tail', 'beyond_middle_tail']
+prefixes = ['all', 'beyond_mainstream', 'combined_middle_tail', 'all_middle_tail', 'beyond_middle_tail']
 new_sampling_range = "m100_l300"
 epochs = 750
 
-model_file_name = f"_tau_0.165_{epochs}eps_300bs_str3"
+model_file_name = f"_tau_0.18_impl60_750eps_300bs"
 datetime_now = '140621_1007'
 ctgan_dir = f"{conf.OUTPUT_DIR}CTGAN_models/"
 all_ctgan_model_path = f'{ctgan_dir}{prefixes[0]}{model_file_name}.pkl'
@@ -26,8 +26,8 @@ syn_sparse_path_combined = f'{conf.SYN_DATA_DIR}syn_sparse_{prefixes[2]}{model_f
 syn_dense_path_combined = f'{conf.SYN_DATA_DIR}syn_dense_{prefixes[2]}{model_file_name}_{new_sampling_range}.csv'
 
 # Original training data (partitioned)
-orig_sparse_all = f"{conf.PARTITIONED_MAINSTREAM_DATA_DIR}orig_sparse_all_tau_0.165_usercolumnremoved.csv" #orig_sparse_all_tau_tau_0.07_l20.csv"
-orig_sparse_beyond_mainstream = f"{conf.PARTITIONED_MAINSTREAM_DATA_DIR}orig_sparse_beyond_mainstream_tau_0.165_usercolumnremoved.csv"
+orig_sparse_all = f"{conf.PARTITIONED_MAINSTREAM_DATA_DIR}orig_sparse_{prefixes[0]}_tau_0.18_playcounts_impl60_lastfm_items_removed_implicit_true.csv" #orig_sparse_all_tau_tau_0.07_l20.csv"
+orig_sparse_beyond_mainstream = f"{conf.PARTITIONED_MAINSTREAM_DATA_DIR}orig_sparse_{prefixes[1]}_tau_0.18_playcounts_impl60_lastfm_items_removed_implicit_true.csv"
 df_orig_all = pd.read_csv(orig_sparse_all, sep=',', encoding="latin-1").fillna(0)
 df_orig_beyond = pd.read_csv(orig_sparse_beyond_mainstream, sep=',', encoding="latin-1").fillna(0)
 
@@ -52,11 +52,11 @@ new_data_all_dense = transform_sparse_to_dense_data(new_data_all)
 new_data_all_dense = new_data_all_dense[new_data_all_dense.rating != 0]
 #new_data_all_dense = pd.read_csv('dense_all_165.csv', encoding="latin-1")
 print(new_data_all_dense)
-new_data_all_dense.to_csv('dense_all_165.csv', index=False)
+new_data_all_dense.to_csv('dense_all_tau_0.18_impl60_750eps_300bs.csv', index=False)
 df_all_users = new_data_all_dense.groupby('user').size().reset_index(name='counts')
 
 print(df_all_users)
-df_all_users_sub = df_all_users[(df_all_users['counts'] > 100) & (df_all_users['counts'] < 200)]
+df_all_users_sub = df_all_users[(df_all_users['counts'] > 250) & (df_all_users['counts'] < 750)]
 print(df_all_users_sub)
 
 # take random indexes from subset

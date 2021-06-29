@@ -8,14 +8,15 @@ def transform_sparse_to_dense_data(sparse_df):
     print(sparse_df)
     for uid in range(len(sparse_df)):
         for item_id in sparse_df.columns:
-            rating = sparse_df.iloc[uid][item_id]
-            #print(f"user: {uid} - item: {item_id} - rating: {rating}")
-            if rating != 0:
-                user_id = int(uid)+1
-                #print(f'rating: {rating}')
-                sample = [user_id, int(item_id), int(rating)]
-                transformed_data.append(sample)
-            
+            if (item_id != 'user'): 
+                rating = sparse_df.iloc[uid][item_id]
+                #print(f"user: {uid} - item: {item_id} - rating: {rating}")
+                if (rating != 0) & (item_id != 'user'):
+                    user_id = int(uid)+1
+                    #print(f'rating: {rating}')
+                    sample = [user_id, int(item_id), int(rating)]
+                    transformed_data.append(sample)
+                
     df = pd.DataFrame(transformed_data, columns = ['user', 'item', 'rating'])
     return df
 

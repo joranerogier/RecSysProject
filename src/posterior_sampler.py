@@ -10,19 +10,19 @@ import conf
 from load_input_data import InputDataLoader
 
 def main(s):
-    part = '' # all_ or beyond_ or ''
+    part = 'all_' # all_ or beyond_ or ''
 
     sample_subset_ratio = 1
-    model_file_name = f"{part}750eps_non_partitioned"
+    model_file_name = f"{part}tau_0.18_impl60_750eps_300bs"
     ctgan_dir = f"{conf.OUTPUT_DIR}CTGAN_models/"
     ctgan_model_path = f'{ctgan_dir}{model_file_name}.pkl'
 
 
     # path to where to save new synthetic data
-    syn_sparse_path = f'{conf.SYN_DATA_DIR}{part}250eps_non_partitioned.csv'
+    syn_sparse_path = f'{conf.SYN_DATA_DIR}{part}tau_0.18_impl60_750eps_300bs.csv'
 
     # Original training data (sparse)
-    data_loader = InputDataLoader(s, "ml-100k", f"{conf.OUTPUT_DIR}partitioned_mainstreaminess_data/orig_sparse_{part}250eps_non_partitioned.csv")
+    data_loader = InputDataLoader(s, "own", f"{conf.OUTPUT_DIR}partitioned_mainstreaminess_data/orig_sparse_{part}tau_0.18_playcounts_impl60_lastfm_items_removed_implicit_true.csv")
     input_data = data_loader.get_sparse_data()
 
 
