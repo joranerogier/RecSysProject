@@ -1,3 +1,9 @@
+"""
+Script used to create new samples based on a provided CTGAN model.
+To create as the same amount of samples as the original data the model was trained on, 
+the original dataset should be provided as well.
+"""
+
 from sdv.tabular import CTGAN
 import numpy as np
 import torch
@@ -25,11 +31,9 @@ def main(s):
     data_loader = InputDataLoader(s, "own", f"{conf.OUTPUT_DIR}partitioned_mainstreaminess_data/orig_sparse_{part}tau_0.18_playcounts_impl60_lastfm_items_removed_implicit_true.csv")
     input_data = data_loader.get_sparse_data()
 
-
     # Set seed to ensure reproducibility
     torch.manual_seed(0)
     np.random.seed(0)
-    #torch.device("cpu")
 
     # Load the saved model
     m = CTGAN.load(ctgan_model_path)
@@ -37,8 +41,6 @@ def main(s):
     # Create new data & save
     sampling_set = int(len(input_data)*sample_subset_ratio)
     new_data = m.sample(sampling_set)
-    print(new_data)
-
     new_data.fillna(0).to_csv(f"{syn_sparse_path}", index=False)
 
 if __name__ == "__main__":

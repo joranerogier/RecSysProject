@@ -21,19 +21,17 @@ import conf
 class RecommenderSystem():
     def __init__(self, train_data, test_data):
         self.num_recs = 10
-        self.max_nbrs = 15 # "reasonable default"
         self.min_nbrs = 3 # "reasonable default"
-        """
-        For the moment, no cross validation is used.
-        Thus, the train & test data are just set globally.
-        """
+
         self.train, self.test = train_data, test_data
 
 
     def eval(self, aname, algo):
+        """
+        Fit the model to the input data and create predictions.
+        """
         fittable = util.clone(algo)
         fittable = Recommender.adapt(fittable)
-        #print(self.train)
         fittable.fit(self.train)
         users = self.test.user.unique()
         recs = batch.recommend(fittable, users, self.num_recs)
@@ -41,10 +39,12 @@ class RecommenderSystem():
         return recs
 
     def analyze_performance(self, recs):
+        """
+        Computation of the algorithm's performance, using the nDCG metric.
+        """
         rla = topn.RecListAnalysis()
         rla.add_metric(topn.ndcg)
         results = rla.compute(recs, self.test)
-        #print(results.head)
         print(results.groupby('Algorithm').ndcg.mean())
         return results
 
@@ -71,7 +71,7 @@ class RecommenderSystem():
     def BPRMF(self, nr_features=50, eps=1, bs=500):
         # Bayesian personalized ranking matrix factorization
         algoname = "BPRMF"
-        bprmf = tf.BPR(features=nr_features, epochs=eps, batch_size=bs)# sensible default value
+        bprmf = tf.BPR(features=nr_features, epochs=eps, batch_size=bs)
         eval = self.eval(algoname, bprmf)
         print("BPRMF was fitted.")
         return eval

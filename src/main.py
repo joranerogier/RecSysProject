@@ -61,11 +61,16 @@ def main(epochs, input_data, model_file_name, input_file, comparison_file_name, 
         comp = df_comparison.get_comparison_df()
         print(comp)
     else:
+        """
+        We have stopped working on the active/inactive partition approach.
+        The code below is only left to show how it was implemented before.
+        It is discouraged to use it as such.
+        """
         # complete input data
         data_loader_c = InputDataLoader(input_data, input_file)
         input_data_c = data_loader_c.get_sparse_data()
 
-        # partitioned input data & Save to csv file
+        # load partitioned input data & Save to csv file
         data_loader = PartitionedInputDataLoader(input_data, input_file)
         input_data_active, input_data_inactive = data_loader.get_sparse_data()
         input_data_active.fillna(0).to_csv(f"{orig_sparse_path_active}", index=False)
@@ -106,7 +111,7 @@ def main(epochs, input_data, model_file_name, input_file, comparison_file_name, 
 if __name__ == "__main__":
     ap = argparse.ArgumentParser()
     ap.add_argument("-E", "--epochs", type=int, help="Nr. of epochs for training the CTGAN model", default=1)
-    ap.add_argument("-D", "--data", type=str, help="Which input data to use: amazon, own, ml-100k, demo", default="own")
+    ap.add_argument("-D", "--data", type=str, help="Which input data to use: own, ml-100k", default="own")
     ap.add_argument("-M", "--ctgan_model_name", type=str, help="Path filename to saving location of trained ctgan", default="test_model")
     ap.add_argument("-I", "--input_file_name", type=str, help="Filename of own input data", default="mini_ml100k_user_10_item_25.csv")
     ap.add_argument("-C", "--comparison_file_name", type=str, help="Filename for csv output comparison data", default="test.csv")

@@ -1,3 +1,9 @@
+"""
+This script reads the original LastFM dataset csv file, 
+transforms it to a user-item matrix, removes the users that have less then 20 ratings, 
+and saves the resulting user-item matrix locally. 
+"""
+
 from lenskit import crossfold as xf
 from sdv.tabular import CTGAN
 import pandas as pd
@@ -27,6 +33,7 @@ for index, row in user_item_matrix.iterrows():
     nr_activities = len(row.to_numpy().nonzero()[0])
     user_activities_count.append(nr_activities)
 
+# Remove users with less than 20 ratings
 print(user_item_matrix)
 user_item_matrix['non-zero'] = user_activities_count
 user_item_matrix = user_item_matrix[user_item_matrix['non-zero'] > 20]
